@@ -1,0 +1,3014 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>After — Relationship Insights</title>
+
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#f6f5f2;
+  --surface:#fff;
+  --surface2:#f0efec;
+  --text:#191918;
+  --muted:#77746e;
+  --line:#dedbd4;
+  --accent:#6d55ff;
+  --accent2:#efeaff;
+  --danger:#a34b55;
+  --shadow:0 18px 50px rgba(30,28,24,.09)
+}
+
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#11110f;
+    --surface:#191917;
+    --surface2:#242420;
+    --text:#f3f1eb;
+    --muted:#aaa69d;
+    --line:#383731;
+    --accent:#9a88ff;
+    --accent2:#292343;
+    --shadow:0 18px 50px rgba(0,0,0,.3)
+  }
+}
+
+*{
+  box-sizing:border-box
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
+
+.app{
+  min-height:100vh;
+  background:var(--bg)
+}
+
+/* NAV */
+
+nav{
+  height:72px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 5vw
+}
+
+.logo{
+  font-weight:800;
+  letter-spacing:-.04em;
+  font-size:23px
+}
+
+.logo span{
+  color:var(--accent)
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:10px
+}
+
+.navpill{
+  font-size:13px;
+  color:var(--muted);
+  border:1px solid var(--line);
+  padding:8px 12px;
+  border-radius:999px
+}
+
+/* LANGUAGE */
+
+.lang-switch{
+  display:flex;
+  align-items:center;
+  border:1px solid var(--line);
+  background:var(--surface);
+  border-radius:999px;
+  padding:3px;
+  gap:2px
+}
+
+.lang-switch button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+  padding:6px 8px;
+  border-radius:999px;
+  cursor:pointer
+}
+
+.lang-switch button:hover{
+  color:var(--text)
+}
+
+.lang-switch button.active{
+  background:var(--accent);
+  color:#fff
+}
+
+/* MAIN */
+
+main{
+  max-width:1120px;
+  margin:auto;
+  padding:72px 5vw 100px
+}
+
+.hero{
+  max-width:820px
+}
+
+.eyebrow{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  color:var(--accent);
+  font-weight:750;
+  margin-bottom:18px
+}
+
+.hero h1{
+  font-size:clamp(46px,7vw,86px);
+  line-height:.94;
+  letter-spacing:-.065em;
+  margin:0 0 26px
+}
+
+.hero p{
+  font-size:19px;
+  line-height:1.55;
+  color:var(--muted);
+  max-width:650px;
+  margin:0
+}
+
+/* UPLOAD */
+
+.card{
+  margin-top:46px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:30px;
+  box-shadow:var(--shadow);
+  width:100%;
+  overflow:hidden
+}
+
+.drop{
+  display:flex;
+  width:100%;
+  min-height:190px;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  border:1.5px dashed #aaa59a;
+  border-radius:18px;
+  padding:34px 24px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s
+}
+
+.drop:hover,
+.drop.drag{
+  border-color:var(--accent);
+  background:var(--accent2)
+}
+
+.drop h2{
+  margin:0 0 9px;
+  font-size:23px
+}
+
+.drop p{
+  margin:0;
+  color:var(--muted)
+}
+
+input{
+  display:none
+}
+
+.upload-icon{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  background:var(--accent2);
+  color:var(--accent);
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  margin-bottom:16px
+}
+
+.upload-help-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-top:16px;
+  font-size:12px;
+  color:var(--muted);
+  flex-wrap:wrap
+}
+
+.how-files-btn{
+  border:1px solid var(--line);
+  background:var(--surface);
+  color:var(--text);
+  padding:9px 13px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.18s
+}
+
+.how-files-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  background:var(--accent2)
+}
+
+#fileRow{
+  display:none !important;
+}
+
+.or{
+  margin:18px 0;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.12em
+}
+
+.demo{
+  border:0;
+  background:var(--text);
+  color:var(--bg);
+  padding:12px 18px;
+  border-radius:12px;
+  font-weight:700;
+  cursor:pointer
+}
+
+.file{
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  padding:15px;
+  background:var(--surface2);
+  border-radius:14px;
+  margin-top:18px
+}
+
+.file.show{
+  display:flex
+}
+
+.file small{
+  color:var(--muted)
+}
+
+.analyze{
+  margin-top:18px;
+  width:100%;
+  border:0;
+  background:var(--accent);
+  color:white;
+  padding:16px;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer
+}
+
+.analyze:disabled{
+  opacity:.5;
+  cursor:not-allowed
+}
+
+/* PROGRESS */
+
+.progress{
+  display:none;
+  margin-top:22px
+}
+
+.progress.show{
+  display:block
+}
+
+.bar{
+  height:7px;
+  background:var(--surface2);
+  border-radius:99px;
+  overflow:hidden
+}
+
+.fill{
+  height:100%;
+  width:0;
+  background:var(--accent);
+  transition:width .6s
+}
+
+.status{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:9px
+}
+
+/* SOURCES */
+
+.sources{
+  margin-top:28px
+}
+
+.sources-head{
+  margin-bottom:18px
+}
+
+.sources-head h2{
+  margin:0;
+  font-size:30px;
+  letter-spacing:-.04em
+}
+
+.sources-head p{
+  margin:6px 0 0;
+  color:var(--muted);
+  line-height:1.5
+}
+
+.source-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  align-items:start
+}
+
+.source-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+  height:max-content;
+  align-self:start
+}
+
+.source-card summary{
+  list-style:none;
+  cursor:pointer;
+  padding:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px
+}
+
+.source-card summary::-webkit-details-marker{
+  display:none
+}
+
+.source-name{
+  font-weight:800;
+  font-size:17px
+}
+
+.source-meta{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px
+}
+
+.source-arrow{
+  color:var(--muted);
+  font-size:20px;
+  transition:.2s
+}
+
+.source-card[open] .source-arrow{
+  transform:rotate(45deg)
+}
+
+.source-body{
+  border-top:1px solid var(--line);
+  padding:18px 20px 20px;
+  animation:sourceOpen .2s ease
+}
+
+@keyframes sourceOpen{
+  from{
+    opacity:0;
+    transform:translateY(-4px)
+  }
+  to{
+    opacity:1;
+    transform:translateY(0)
+  }
+}
+
+.source-body h4{
+  margin:0 0 10px;
+  font-size:13px
+}
+
+.source-body ol{
+  margin:0;
+  padding-left:20px;
+  color:var(--muted);
+  line-height:1.6;
+  font-size:13px
+}
+
+.source-body li{
+  margin-bottom:7px
+}
+
+.file-type{
+  display:inline-block;
+  margin-top:13px;
+  padding:6px 9px;
+  border-radius:8px;
+  background:var(--accent2);
+  color:var(--accent);
+  font-size:11px;
+  font-weight:800
+}
+
+.source-note{
+  margin-top:10px;
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5
+}
+
+/* REPORT */
+
+#report{
+  display:block;
+  margin-top:50px
+}
+
+.report-head{
+  display:flex;
+  justify-content:space-between;
+  gap:25px;
+  align-items:end;
+  margin-bottom:24px
+}
+
+.report-head h2{
+  font-size:42px;
+  letter-spacing:-.05em;
+  margin:0
+}
+
+.report-head p{
+  color:var(--muted);
+  margin:6px 0 0
+}
+
+.badge{
+  background:var(--accent2);
+  color:var(--accent);
+  padding:9px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  white-space:nowrap
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px
+}
+
+.metric{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:22px
+}
+
+.metric .num{
+  font-size:31px;
+  font-weight:800;
+  letter-spacing:-.04em
+}
+
+.metric small{
+  color:var(--muted);
+  display:block;
+  margin-top:5px
+}
+
+.wide{
+  grid-column:1/-1
+}
+
+.section{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:26px;
+  margin-top:14px
+}
+
+.section h3{
+  margin:0 0 7px;
+  font-size:21px
+}
+
+.section>p{
+  color:var(--muted);
+  line-height:1.55
+}
+
+.timeline{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+  margin-top:24px
+}
+
+.phase{
+  padding:16px 12px;
+  border-radius:14px;
+  background:var(--surface2);
+  min-height:105px
+}
+
+.phase .dot{
+  width:9px;
+  height:9px;
+  background:var(--accent);
+  border-radius:50%;
+  margin-bottom:14px
+}
+
+.phase b{
+  font-size:13px
+}
+
+.phase small{
+  display:block;
+  color:var(--muted);
+  margin-top:7px;
+  line-height:1.35
+}
+
+.chart{
+  height:210px;
+  display:flex;
+  align-items:end;
+  gap:8px;
+  padding:20px 5px 0
+}
+
+.col{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:7px;
+  height:100%;
+  justify-content:end
+}
+
+.col i{
+  display:block;
+  width:100%;
+  max-width:50px;
+  background:var(--accent);
+  border-radius:7px 7px 2px 2px;
+  min-height:8px
+}
+
+.col small{
+  font-size:10px;
+  color:var(--muted)
+}
+
+.finding{
+  display:grid;
+  grid-template-columns:35px 1fr;
+  gap:12px;
+  margin-top:18px
+}
+
+.finding .n{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:var(--accent2);
+  color:var(--accent);
+  display:grid;
+  place-items:center;
+  font-weight:800
+}
+
+.finding p{
+  margin:0;
+  line-height:1.5
+}
+
+.evidence{
+  margin-top:12px;
+  padding:14px 16px;
+  background:var(--surface2);
+  border-radius:13px;
+  font-size:13px;
+  color:var(--muted);
+  border-left:3px solid var(--accent)
+}
+
+.footer{
+  margin-top:55px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+  max-width:760px
+}
+
+@media(max-width:760px){
+
+  main{
+    padding-top:45px
+  }
+
+  .card{
+    padding:18px
+  }
+
+  .drop{
+    padding:34px 18px
+  }
+
+  .grid{
+    grid-template-columns:1fr
+  }
+
+  .timeline{
+    grid-template-columns:1fr
+  }
+
+  .wide{
+    grid-column:auto
+  }
+
+  .report-head{
+    display:block
+  }
+
+  .badge{
+    display:inline-block;
+    margin-top:15px
+  }
+
+  .source-grid{
+    grid-template-columns:1fr
+  }
+
+  .lang-switch button{
+    padding:5px 6px
+  }
+
+  .navpill{
+    display:none
+  }
+
+  .nav-right{
+    gap:5px
+  }
+}
+
+.upload-help-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.how-files-btn{border:1px solid var(--line);background:var(--surface);color:var(--text);padding:9px 13px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;transition:.18s}
+.how-files-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent2)}
+
+
+/* ===== AFTER: QUESTION-FIRST HOOK ===== */
+.hook-questions{margin:38px 0 28px}
+.hook-head{max-width:820px;margin-bottom:18px}
+.hook-head h2{font-size:clamp(34px,5vw,62px);line-height:.98;letter-spacing:-.055em;margin:8px 0 14px}
+.hook-head h2 span{color:var(--accent)}
+.hook-head p{max-width:720px;color:var(--muted);font-size:15px;line-height:1.6;margin:0}
+.hook-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.hook-question{appearance:none;width:100%;text-align:left;display:grid;grid-template-columns:34px 1fr 18px;gap:12px;align-items:start;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:16px;padding:17px 16px;cursor:pointer;transition:.18s}
+.hook-question:hover{border-color:var(--accent);background:var(--accent2);transform:translateY(-2px)}
+.hook-question i{font-style:normal;color:var(--accent);font-size:17px;font-weight:900;padding-top:2px}
+.hook-num{font-size:10px;letter-spacing:.08em;color:var(--accent);font-weight:900;padding-top:3px}
+.hook-question b{display:block;font-size:14px;line-height:1.3;letter-spacing:-.01em}
+.hook-question small{display:block;color:var(--muted);font-size:11px;line-height:1.45;margin-top:5px}
+.hook-wide{grid-column:1 / -1}
+.hook-bottom{margin-top:10px;border:1px solid var(--line);background:var(--surface2);border-radius:17px;padding:15px 17px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.hook-bottom b{display:block;font-size:13px}
+.hook-bottom span{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.hook-bottom button{white-space:nowrap;border:0;background:var(--accent);color:#fff;border-radius:10px;padding:11px 14px;font-weight:900;font-size:11px;cursor:pointer}
+.hook-bottom button span{display:inline;color:inherit;margin:0;font-size:12px}
+@media(max-width:760px){
+  .hook-grid{grid-template-columns:1fr}
+  .hook-wide{grid-column:auto}
+  .hook-bottom{display:block}
+  .hook-bottom button{margin-top:12px;width:100%}
+}
+
+/* ===== AFTER: INTERACTIVE REALISTIC SAMPLE ===== */
+.interactive-case{margin-top:34px;padding-top:8px}
+.case-top{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+.case-hero,.case-result,.case-box{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:27px}
+.case-hero{background:linear-gradient(145deg,var(--surface),var(--accent2))}
+.case-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-weight:900}
+.case-hero h3{font-size:37px;line-height:1;letter-spacing:-.055em;margin:9px 0 13px}
+.case-hero p,.case-result p,.case-box>p{color:var(--muted);line-height:1.58}
+.case-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.case-pill{font-size:11px;font-weight:850;padding:8px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.case-result{display:flex;flex-direction:column;justify-content:space-between}
+.case-big{font-size:45px;font-weight:900;letter-spacing:-.06em;margin-top:7px}
+.case-verdict{background:var(--surface2);border-radius:14px;padding:14px;font-size:13px;line-height:1.5;margin-top:16px}
+.case-kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:9px;margin-top:13px}
+.case-kpi{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:14px}
+.case-kpi b{font-size:20px;letter-spacing:-.04em}.case-kpi small{display:block;color:var(--muted);font-size:10px;line-height:1.3;margin-top:4px}
+.case-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}
+.case-tab{border:1px solid var(--line);background:var(--surface2);color:var(--muted);border-radius:999px;padding:9px 12px;font-size:11px;font-weight:900;cursor:pointer}
+.case-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.case-output{margin-top:13px;background:var(--surface2);border-radius:16px;padding:19px;line-height:1.55;font-size:13px}
+.case-output h4{margin:0 0 8px;font-size:18px}
+.case-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}
+.case-compare>div{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:13px}
+.case-compare b{display:block;font-size:18px;margin-top:4px}
+.case-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:900}
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:13px}
+.case-chart{height:270px;display:flex;align-items:end;gap:7px;border-bottom:1px solid var(--line);padding:0 4px 82px;margin-top:22px;overflow:visible}
+.case-bar{flex:1 1 0;min-width:0;height:var(--bar-h,50%);background:var(--accent);border-radius:6px 6px 1px 1px;opacity:.72;cursor:pointer;position:relative;transition:.16s}
+.case-bar:hover,.case-bar.active{opacity:1;transform:translateY(-3px)}
+.case-bar > span{position:absolute;bottom:-67px;left:50%;transform:translateX(-50%);width:calc(100% + 10px);min-width:0;font-size:9px;color:var(--muted);line-height:1.08;text-align:center;white-space:normal;overflow-wrap:normal;word-break:normal;pointer-events:none}
+.case-bar > span > span:first-child{display:block;white-space:nowrap;overflow:hidden;text-overflow:clip}
+.case-bar > span .yr{display:block;font-weight:750;color:var(--muted);margin-top:3px;white-space:nowrap}
+.case-chart-info{margin-top:18px;padding:14px 16px;background:var(--surface2);border-radius:12px;font-size:13px;line-height:1.5}
+.after-activity-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}
+.after-activity-controls select,.after-activity-controls button{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:9px;padding:8px 11px;font:inherit;cursor:pointer}
+.after-activity-controls button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.after-activity-summary{font-size:12px;color:var(--muted);margin:6px 0 12px}
+.after-activity-chart{display:flex;align-items:flex-end;gap:3px;min-height:190px;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:10px 4px 4px;border-bottom:1px solid var(--line)}
+.after-activity-bar{flex:0 0 9px;min-width:9px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:165px;position:relative}
+.after-activity-bar i{display:block;width:100%;min-height:2px;background:var(--accent);border-radius:4px 4px 0 0}
+.after-activity-bar small{font-size:9px;color:var(--muted);writing-mode:vertical-rl;transform:rotate(180deg);height:54px;margin-top:5px;white-space:nowrap}
+.after-activity-empty{padding:22px 0;color:var(--muted);font-size:13px}
+
+@media(max-width:700px){.case-chart{gap:4px;height:250px;padding-bottom:76px}.case-bar > span{font-size:8px;width:calc(100% + 8px);bottom:-62px}}
+.case-evidence{display:grid;gap:9px;margin-top:15px}
+.case-quote{border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}
+.case-quote-head{display:flex;justify-content:space-between;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.case-date{font-size:10px;color:var(--muted);font-weight:850}.case-tag{font-size:10px;color:var(--accent);font-weight:900;letter-spacing:.08em}
+.case-quote-body{padding:15px}.case-quote-text{font-size:16px;line-height:1.45}
+.case-context{font-size:11px;color:var(--muted);line-height:1.5;margin-top:8px}
+.case-meaning{display:none;background:var(--accent2);border-radius:11px;padding:12px;margin-top:11px;font-size:11px;line-height:1.55}
+.case-quote.open .case-meaning{display:block}
+.case-button{margin-top:10px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:9px;padding:7px 9px;font-size:10px;font-weight:850;cursor:pointer}
+.case-windows{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:15px}
+.case-window{border:1px solid var(--line);border-radius:14px;padding:15px;background:var(--surface2);cursor:pointer}
+.case-window:hover,.case-window.active{border-color:var(--accent);background:var(--accent2)}
+.case-window h4{margin:0 0 5px;font-size:13px}.case-window p{font-size:11px;margin:0;color:var(--muted);line-height:1.4}
+.case-window-detail{margin-top:11px;background:var(--surface2);padding:15px;border-radius:13px;font-size:12px;line-height:1.55}
+.case-bars{display:grid;gap:13px;margin-top:16px}
+.case-row{display:grid;grid-template-columns:145px 1fr 45px;gap:9px;align-items:center;font-size:11px}
+.case-progress{height:10px;border-radius:99px;background:var(--surface2);overflow:hidden}.case-progress i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.case-note{margin-top:15px;padding:13px 15px;border-left:3px solid var(--accent);background:var(--surface2);border-radius:0 12px 12px 0;font-size:11px;color:var(--muted);line-height:1.55}
+.case-final{display:grid;gap:9px;margin-top:15px}
+.case-finding{display:grid;grid-template-columns:29px 1fr;gap:10px}
+.case-number{width:29px;height:29px;border-radius:50%;background:var(--accent2);color:var(--accent);display:grid;place-items:center;font-weight:900}
+.case-finding p{margin:0;font-size:12px;line-height:1.5}
+@media(max-width:900px){.case-top,.case-grid{grid-template-columns:1fr}.case-kpis{grid-template-columns:repeat(3,1fr)}.case-windows{grid-template-columns:1fr}}
+@media(max-width:600px){.case-kpis{grid-template-columns:repeat(2,1fr)}.case-hero h3{font-size:30px}.case-compare{grid-template-columns:1fr}.case-row{grid-template-columns:105px 1fr 38px}}
+
+
+/* ===== FINAL BREAKUP QUESTIONS ===== */
+.breakup-answers{margin-top:14px}
+.breakup-answers-head{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;margin-bottom:16px}
+.breakup-answers-head h3{margin:6px 0 0;font-size:27px;letter-spacing:-.045em}
+.breakup-answers-head p{color:var(--muted);line-height:1.55;margin:7px 0 0;max-width:760px}
+.answer-list{display:grid;gap:8px}
+.answer-item{border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}
+.answer-question{width:100%;border:0;background:transparent;color:var(--text);padding:18px;display:flex;align-items:center;justify-content:space-between;gap:15px;text-align:left;cursor:pointer}
+.answer-question:hover{background:var(--surface2)}
+.answer-question strong{font-size:14px;line-height:1.35}
+.answer-arrow{font-size:20px;color:var(--muted);transition:.18s;flex:0 0 auto}
+.answer-item.open .answer-arrow{transform:rotate(45deg);color:var(--accent)}
+.answer-body{display:none;border-top:1px solid var(--line);padding:18px 20px 20px;line-height:1.6;font-size:13px;color:var(--muted)}
+.answer-item.open .answer-body{display:block}
+.answer-body .answer-lead{font-size:17px;line-height:1.4;color:var(--text);font-weight:750;margin-bottom:10px}
+.answer-body b{color:var(--text)}
+.answer-evidence{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px}
+.answer-evidence>div{background:var(--surface2);border-radius:12px;padding:12px;font-size:11px;line-height:1.45}
+.answer-evidence small{display:block;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:var(--accent);margin-bottom:4px}
+.final-verdict{margin-top:15px;padding:20px;border-radius:17px;background:linear-gradient(145deg,var(--accent2),var(--surface2));border:1px solid var(--line)}
+.final-verdict h4{margin:0 0 8px;font-size:20px;letter-spacing:-.03em}
+.final-verdict p{margin:0;color:var(--muted);line-height:1.6;font-size:13px}
+.final-verdict .verdict-line{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);color:var(--text);font-weight:700}
+@media(max-width:700px){.breakup-answers-head{grid-template-columns:1fr}.answer-evidence{grid-template-columns:1fr}}
+
+.faq{margin-top:60px}.faq h3{font-size:34px;letter-spacing:-.045em;margin:8px 0 25px}
+.faq details{border-top:1px solid var(--line);padding:20px 0}.faq details:last-of-type{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;font-size:17px;font-weight:800;list-style:none;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}.faq summary::after{content:"+";color:var(--muted)}.faq details[open] summary::after{content:"–"}
+.faq p{color:var(--muted);line-height:1.6;max-width:750px;margin:12px 0 0}
+</style>
+
+<style>
+.after-file-list{display:grid;gap:8px;margin-top:14px}
+.after-file-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:var(--surface2)}
+.after-file-meta{min-width:0}.after-file-name{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.after-file-sub{font-size:11px;color:var(--muted);margin-top:3px}.after-file-status{font-size:11px;font-weight:800;white-space:nowrap}.after-file-status.ok{color:var(--accent)}.after-file-status.err{color:#b42318}.after-file-remove{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:18px}.pdf-download-wrap{display:flex;justify-content:flex-end;gap:10px;margin:0 0 14px}.pdf-download-btn{border:1px solid var(--line);background:var(--ink);color:#fff;border-radius:12px;padding:11px 16px;font-weight:800;cursor:pointer;font-size:13px}.pdf-download-btn:disabled{opacity:.55;cursor:wait}
+.live-report-note{padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface2);color:var(--muted);font-size:12px;margin-bottom:14px}
+
+.speaker-map-backdrop{position:fixed;inset:0;z-index:9999;background:rgba(20,18,27,.48);display:flex;align-items:center;justify-content:center;padding:18px}
+.speaker-map-dialog{width:min(650px,100%);max-height:min(82vh,760px);overflow:auto;background:var(--surface,#fff);color:var(--ink,#201d25);border:1px solid var(--line,#e8e3ec);border-radius:20px;padding:24px;box-shadow:0 24px 80px rgba(0,0,0,.2)}
+.speaker-map-dialog h2{font-size:23px;letter-spacing:-.04em;margin:0 0 8px}.speaker-map-intro{font-size:13px;line-height:1.55;color:var(--muted);margin:0 0 18px}
+.speaker-map-file{border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0}.speaker-map-file-title{font-size:12px;font-weight:850;overflow-wrap:anywhere;margin-bottom:9px}.speaker-map-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,.9fr);gap:12px;align-items:center;padding:7px 0}.speaker-map-nick{font-size:13px;font-weight:700;overflow-wrap:anywhere}.speaker-map-count{font-size:10px;color:var(--muted);margin-top:2px}.speaker-map-select{width:100%;min-width:0;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface2,#faf9fc);color:inherit;font:inherit;font-size:12px}.speaker-map-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px;position:sticky;bottom:-24px;padding:14px 0 0;background:var(--surface,#fff)}.speaker-map-actions button{border-radius:11px;padding:11px 15px;font-weight:800;border:1px solid var(--line);cursor:pointer}.speaker-map-cancel{background:transparent;color:inherit}.speaker-map-confirm{background:var(--ink,#201d25);color:#fff;border-color:var(--ink,#201d25)!important}.speaker-map-error{font-size:12px;color:#b42318;margin-top:10px;display:none}
+@media(max-width:520px){.speaker-map-dialog{padding:18px}.speaker-map-row{grid-template-columns:1fr;gap:6px}.speaker-map-actions{bottom:-18px}}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<nav>
+
+  <div class="logo">
+    after<span>.</span>
+  </div>
+
+  <div class="nav-right">
+
+    <div class="lang-switch" aria-label="Language">
+      <button type="button" data-lang="en" class="active">EN</button>
+      <button type="button" data-lang="ru">RU</button>
+      <button type="button" data-lang="es">ES</button>
+      <button type="button" data-lang="it">IT</button>
+      <button type="button" data-lang="de">DE</button>
+    </div>
+
+    <div class="navpill" data-i18n="navPrivacy">
+      Private by design
+    </div>
+
+  </div>
+
+</nav>
+
+<main>
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="eyebrow" data-i18n="heroEyebrow">
+    Relationship insights
+  </div>
+
+  <h1 data-i18n="heroTitle">
+    Your story is in your messages.
+  </h1>
+
+  <p data-i18n="heroText">
+    Upload your conversation and discover how the relationship evolved over time — key turning points, communication patterns, recurring conflicts and the moments that changed the dynamic.
+  </p>
+
+</section>
+
+
+
+<!-- UPLOAD -->
+
+<section class="card" id="uploadCard">
+
+  <label class="drop" id="drop">
+
+    <input
+      id="fileInput"
+      type="file"
+      accept=".txt,.json,.zip,.html"
+      multiple
+    >
+
+    <div class="upload-icon">
+      ↑
+    </div>
+
+    <h2 data-i18n="dropTitle">
+      Drop your conversation here
+    </h2>
+
+    <p data-i18n="dropText">
+      WhatsApp · Telegram · Instagram · Messenger · VK · more
+    </p>
+
+  </label>
+
+  <div class="upload-help-row">
+    <span data-i18n="upHelp">Don't have the export yet?</span>
+    <button
+      type="button"
+      class="how-files-btn" data-i18n="upHow"
+      onclick="document.getElementById('sources').scrollIntoView({behavior:'smooth',block:'start'})"
+    >
+      How to get my files →
+    </button>
+  </div>
+
+
+  <div class="file" id="fileRow">
+
+    <div>
+      <b id="fileName">
+        conversation.txt
+      </b>
+
+      <br>
+
+      <small id="fileSize">
+        Ready to analyze
+      </small>
+    </div>
+
+    <span>✓</span>
+
+  </div>
+
+  <button
+    class="analyze"
+    id="analyze"
+    disabled
+    data-i18n="analyzeButton"
+  >
+    Analyze my relationship
+  </button>
+
+  <div class="progress" id="progress">
+
+    <div class="status">
+
+      <span id="status" data-i18n="prep">
+        Preparing your conversation…
+      </span>
+
+      <b id="pct">
+        0%
+      </b>
+
+    </div>
+
+    <div class="bar">
+      <div class="fill" id="fill"></div>
+    </div>
+    <div id="progressDetail" style="margin-top:9px;font-size:11px;color:var(--muted)">Preparing…</div>
+
+  </div>
+
+</section>
+
+
+<!-- IMPORT GUIDE -->
+
+<section class="sources" id="sources">
+
+  <div class="sources-head">
+
+    <div class="eyebrow" data-i18n="importEyebrow">
+      Import guide
+    </div>
+
+    <h2 data-i18n="importTitle">
+      Bring your conversation with you.
+    </h2>
+
+    <p data-i18n="importText">
+      Choose the platform where your messages live. We'll show you how to export them and what to upload.
+    </p>
+
+  </div>
+
+
+  <div class="source-grid">
+
+
+    <!-- WHATSAPP -->
+
+    <details class="source-card">
+
+      <summary>
+
+        <div>
+          <span class="source-name">
+            WhatsApp
+          </span>
+
+          <span class="source-meta">
+            Android · iPhone · WhatsApp Web
+          </span>
+        </div>
+
+        <span class="source-arrow">
+          +
+        </span>
+
+      </summary>
+
+      <div class="source-body">
+
+        <h4 data-i18n="waAndroid">
+          Android
+        </h4>
+
+        <ol>
+          <li data-i18n="wa1">
+            Open the conversation in WhatsApp.
+          </li>
+
+          <li data-i18n="wa2">
+            Tap ⋮ → More → Export chat.
+          </li>
+
+          <li data-i18n="wa3">
+            Choose <b>Without media</b> for a smaller export.
+          </li>
+
+          <li data-i18n="wa4">
+            Save or send the exported file to your computer.
+          </li>
+        </ol>
+
+
+        <h4 style="margin-top:16px" data-i18n="waIphone">
+          iPhone
+        </h4>
+
+        <ol>
+
+          <li data-i18n="wa5">
+            Open the conversation in WhatsApp.
+          </li>
+
+          <li data-i18n="wa6">
+            Tap the contact or group name at the top.
+          </li>
+
+          <li data-i18n="wa7">
+            Choose <b>Export Chat</b>.
+          </li>
+
+          <li data-i18n="wa8">
+            Choose <b>Without Media</b> and save the ZIP.
+          </li>
+
+        </ol>
+
+        <div class="file-type"><span data-i18n="upl">Upload:</span> .txt or .zip</div>
+
+        <div class="source-note" data-i18n="waNote">
+          WhatsApp Web and Desktop are useful for viewing messages, but the native export is done from your phone.
+        </div>
+
+      </div>
+
+    </details>
+
+
+    <!-- TELEGRAM -->
+
+    <details class="source-card">
+
+      <summary>
+
+        <div>
+          <span class="source-name">
+            Telegram
+          </span>
+
+          <span class="source-meta">
+            Windows · macOS · Linux
+          </span>
+        </div>
+
+        <span class="source-arrow">
+          +
+        </span>
+
+      </summary>
+
+      <div class="source-body">
+
+        <h4 data-i18n="telegramTitle">
+          Telegram Desktop
+        </h4>
+
+        <ol>
+
+          <li data-i18n="telegram1">
+            Install and open Telegram Desktop.
+          </li>
+
+          <li data-i18n="telegram2">
+            Open the chat and use ⋮ → Export chat history.
+          </li>
+
+          <li data-i18n="telegram3">
+            For a wider export, open Settings → Advanced → Export Telegram Data.
+          </li>
+
+          <li data-i18n="telegram4">
+            Select <b>Machine-readable JSON</b> when available.
+          </li>
+
+        </ol>
+
+        <div class="file-type"><span data-i18n="upl">Upload:</span> .json or .zip</div>
+
+        <div class="source-note" data-i18n="telegramNote">
+          Telegram's desktop app provides the most practical native export workflow.
+        </div>
+
+      </div>
+
+    </details>
+
+
+    <!-- INSTAGRAM -->
+
+    <details class="source-card">
+
+      <summary>
+
+        <div>
+          <span class="source-name">
+            Instagram DMs
+          </span>
+
+          <span class="source-meta">
+            iPhone · Android · Web
+          </span>
+        </div>
+
+        <span class="source-arrow">
+          +
+        </span>
+
+      </summary>
+
+      <div class="source-body">
+
+        <h4 data-i18n="instagramTitle">
+          Meta Accounts Center
+        </h4>
+
+        <ol>
+
+          <li data-i18n="instagram1">
+            Open Instagram → Settings and activity → Accounts Center.
+          </li>
+
+          <li data-i18n="instagram2">
+            Open Your information and permissions → Download your information.
+          </li>
+
+          <li data-i18n="instagram3">
+            Select your Instagram account and request a download.
+          </li>
+
+          <li data-i18n="instagram4">
+            Choose JSON when available and request the archive.
+          </li>
+
+          <li data-i18n="instagram5">
+            Download the archive and upload it here.
+          </li>
+
+        </ol>
+
+        <div class="file-type"><span data-i18n="upl">Upload:</span> .zip / JSON</div>
+
+        <div class="source-note" data-i18n="instagramNote">
+          The exact menu names may vary slightly depending on your Instagram version and language.
+        </div>
+
+      </div>
+
+    </details>
+
+
+    <!-- MESSENGER -->
+
+    <details class="source-card">
+
+      <summary>
+
+        <div>
+          <span class="source-name">
+            Messenger
+          </span>
+
+          <span class="source-meta">
+            iPhone · Android · Web
+          </span>
+        </div>
+
+        <span class="source-arrow">
+          +
+        </span>
+
+      </summary>
+
+      <div class="source-body">
+
+        <h4 data-i18n="messengerTitle">
+          Meta Accounts Center
+        </h4>
+
+        <ol>
+
+          <li data-i18n="messenger1">
+            Open Facebook or Instagram and go to Accounts Center.
+          </li>
+
+          <li data-i18n="messenger2">
+            Open Your information and permissions → Download your information.
+          </li>
+
+          <li data-i18n="messenger3">
+            Select your Facebook/Messenger information.
+          </li>
+
+          <li data-i18n="messenger4">
+            Choose JSON and request the download.
+          </li>
+
+          <li data-i18n="messenger5">
+            Download the archive and upload it here.
+          </li>
+
+        </ol>
+
+        <div class="file-type"><span data-i18n="upl">Upload:</span> .zip / JSON</div>
+
+        <div class="source-note" data-i18n="messengerNote">
+          You may need to select the relevant account and message data inside the export settings.
+        </div>
+
+      </div>
+
+    </details>
+
+
+    <!-- IMESSAGE -->
+
+    <details class="source-card">
+
+      <summary>
+
+        <div>
+          <span class="source-name">
+            iMessage
+          </span>
+
+          <span class="source-meta">
+            iPhone · iPad · Mac
+          </span>
+        </div>
+
+        <span class="source-arrow">
+          +
+        </span>
+
+      </summary>
+
+      <div class="source-body">
+
+        <h4 data-i18n="imessageTitle">
+          Export options
+        </h4>
+
+        <ol>
+
+          <li data-i18n="imessage1">
+            Apple does not provide a simple native "Export Chat" button for iMessage.
+          </li>
+
+          <li data-i18n="imessage2">
+            On Mac, your Messages history is stored locally.
+          </li>
+
+          <li data-i18n="imessage3">
+            A compatible local export tool can convert the conversation into a usable format.
+          </li>
+
+          <li data-i18n="imessage4">
+            Upload the resulting text, HTML or JSON file.
+          </li>
+
+        </ol>
+
+        <div class="file-type"><span data-i18n="tgt">Target:</span> .txt / .html / .json</div>
+
+        <div class="source-note" data-i18n="imessageNote">
+          iMessage import can be marked as coming soon in the first MVP until a reliable export workflow is finalized.
+        </div>
+
+      </div>
+
+    </details>
+
+
+    <!-- DISCORD -->
+
+    <details class="source-card">
+
+      <summary>
+
+        <div>
+          <span class="source-name">
+            Discord
+          </span>
+
+          <span class="source-meta">
+            Windows · macOS · Web · Mobile
+          </span>
+        </div>
+
+        <span class="source-arrow">
+          +
+        </span>
+
+      </summary>
+
+      <div class="source-body">
+
+        <h4 data-i18n="discordTitle">
+          Data export
+        </h4>
+
+        <ol>
+
+          <li data-i18n="discord1">
+            Open Discord User Settings.
+          </li>
+
+          <li data-i18n="discord2">
+            Go to Data & Privacy and request your data package.
+          </li>
+
+          <li data-i18n="discord3">
+            Wait for Discord to prepare the archive.
+          </li>
+
+          <li data-i18n="discord4">
+            Download the archive and upload the relevant message data here.
+          </li>
+
+        </ol>
+
+        <div class="file-type"><span data-i18n="upl">Upload:</span> <span data-i18n="upArch">export archive / JSON</span></div>
+
+        <div class="source-note" data-i18n="discordNote">
+          Discord's export is account-level rather than a simple one-chat export.
+        </div>
+
+      </div>
+
+    </details>
+
+
+    <!-- VK -->
+
+    <details class="source-card">
+
+      <summary>
+
+        <div>
+          <span class="source-name">
+            VK
+          </span>
+
+          <span class="source-meta">
+            ВКонтакте · Web · Android · iPhone
+          </span>
+        </div>
+
+        <span class="source-arrow">
+          +
+        </span>
+
+      </summary>
+
+      <div class="source-body">
+
+        <h4 data-i18n="vkTitle">
+          Как получить переписку
+        </h4>
+
+        <ol>
+
+          <li data-i18n="vk1">
+            Откройте ВКонтакте и перейдите в настройки аккаунта.
+          </li>
+
+          <li data-i18n="vk2">
+            Найдите раздел, связанный с приватностью, данными аккаунта или архивом данных.
+          </li>
+
+          <li data-i18n="vk3">
+            Запросите архив своих данных ВКонтакте.
+          </li>
+
+          <li data-i18n="vk4">
+            После подготовки архива скачайте его на компьютер.
+          </li>
+
+          <li data-i18n="vk5">
+            Найдите внутри архива данные сообщений и загрузите их сюда.
+          </li>
+
+        </ol>
+
+        <div class="file-type"><span data-i18n="upl">Upload:</span> <span data-i18n="upVk">VK data archive</span></div>
+
+        <div class="source-note" data-i18n="vkNote">
+          В зависимости от версии ВКонтакте и языка интерфейса название раздела и структура архива могут отличаться.
+        </div>
+
+      </div>
+
+    </details>
+
+  </div>
+
+</section>
+
+
+<!-- REPORT -->
+<section id="report">
+<!-- INTERACTIVE CASE STUDY -->
+  <section class="interactive-case">
+    <div class="eyebrow" data-i18n="caseEyebrow">A concrete example · fictional relationship</div>
+    <div class="case-top">
+      <div class="case-hero">
+        <div class="case-kicker" data-i18n="caseKicker">After case file · #AF-2047</div>
+        <h3 id="caseNames">Daniel & Sofia</h3>
+        <p><b data-i18n="caseDates">January 2019 → September 2024.</b> <span data-i18n="caseIntro">58,416 messages across WhatsApp and Telegram. The point of the report is not to say “good” or “bad” — it is to reconstruct what changed, when it changed, and what evidence supports each conclusion.</span></p>
+        <div class="case-pills">
+          <span class="case-pill" data-i18n="casePillMessages">58,416 messages</span><span class="case-pill" data-i18n="casePillDuration">5y 8m</span><span class="case-pill" data-i18n="casePillPhases">4 major phases</span><span class="case-pill" data-i18n="casePillTurns">27 turning points</span>
+        </div>
+      </div>
+      <div class="case-result">
+        <div><div class="case-kicker" data-i18n="caseShiftKicker">Strongest structural shift</div><div class="case-big" data-i18n="caseShiftDate">October 2023</div><p data-i18n="caseShiftText">Not the breakup date. The archive shows the communication system changing almost 11 months before the final message.</p></div>
+        <div class="case-verdict"><b data-i18n="caseAnswerLabel">After's answer:</b><br><span data-i18n="caseVerdict">reciprocity, conflict repair and concrete future planning all weaken in the same period. That convergence makes October 2023 much more important than any single dramatic message.</span></div>
+      </div>
+    </div>
+    <div class="case-kpis">
+      <div class="case-kpi"><b data-i18n="kpiDur">5y 8m</b><small data-i18n="kpiHistory">history reconstructed</small></div><div class="case-kpi"><b>58.4k</b><small data-i18n="kpiMessages">messages</small></div><div class="case-kpi"><b>4</b><small data-i18n="kpiPhases">relationship phases</small></div><div class="case-kpi"><b>27</b><small data-i18n="kpiCandidates">turning-point candidates</small></div><div class="case-kpi"><b data-i18n="kpiGap">11 mo</b><small data-i18n="kpiShift">shift → breakup</small></div><div class="case-kpi"><b data-i18n="kpiHigh">High</b><small data-i18n="kpiConfidence">main-pattern confidence</small></div>
+    </div>
+    <div class="case-box" style="margin-top:13px">
+      <div class="case-kicker" data-i18n="askReport">Ask the report</div><h3 style="margin-top:7px" data-i18n="askTitle">The answer changes depending on the question.</h3><p data-i18n="askText">Click through the questions a real person might ask immediately after a breakup.</p>
+      <div class="case-tabs"><button class="case-tab active" data-case-tab="story" type="button" data-i18n="tabStory">What happened?</button><button class="case-tab" data-case-tab="when" type="button" data-i18n="tabWhen">When did it start?</button><button class="case-tab" data-case-tab="feelings" type="button" data-i18n="tabFeelings">Was she pulling away?</button><button class="case-tab" data-case-tab="other" type="button" data-i18n="tabOther">Could there be someone else?</button><button class="case-tab" data-case-tab="action" type="button" data-i18n="tabAction">Could I have changed it?</button></div>
+      <div class="case-output" id="caseOutput"></div>
+    </div>
+    <div class="case-grid">
+      <div class="case-box"><div class="case-kicker" data-i18n="timelineKicker">Timeline</div><h3 style="margin-top:7px" data-i18n="timelineTitle">The relationship signal over time</h3><p data-i18n="timelineText">Illustrative composite of reciprocity, repair and future-oriented communication. Click a period.</p><div class="case-chart" id="caseChart"></div><div class="case-chart-info" id="caseChartInfo"></div></div>
+      <div class="case-box"><div class="case-kicker" data-i18n="beforeKicker">Before vs after</div><h3 style="margin-top:7px" data-i18n="beforeTitle">What actually changed?</h3><p data-i18n="beforeText">These are observable communication measures — not “love scores”.</p><div class="case-bars"><div class="case-row"><b data-i18n="metricReciprocity">Reciprocity</b><div class="case-progress"><i style="width:76%"></i></div><span>76→43</span></div><div class="case-row"><b data-i18n="metricRepair">Conflict repair</b><div class="case-progress"><i style="width:82%"></i></div><span>82→35</span></div><div class="case-row"><b data-i18n="metricPlans">Future plans</b><div class="case-progress"><i style="width:71%"></i></div><span>71→28</span></div><div class="case-row"><b data-i18n="metricAffection">Affectionate language</b><div class="case-progress"><i style="width:69%"></i></div><span>69→37</span></div></div><div class="case-note"><b data-i18n="importantLabel">Important:</b> <span data-i18n="importantText">After would never turn these into “she loved you 37%”. They describe changes in communication behavior.</span></div></div>
+    </div>
+    <div class="case-box" style="margin-top:13px"><div class="case-kicker" data-i18n="evidenceKicker">Evidence layer</div><h3 style="margin-top:7px" data-i18n="evidenceTitle">Exact messages behind the conclusion.</h3><p data-i18n="evidenceText">Click “Why does this matter?” to expand the interpretation. The message alone is never the whole conclusion.</p><div class="case-evidence" id="caseEvidence"></div></div>
+    <div class="case-box" style="margin-top:13px"><div class="case-kicker" data-i18n="interventionKicker">Intervention analysis</div><h3 style="margin-top:7px" data-i18n="interventionTitle">When could something realistically have been done?</h3><p data-i18n="interventionText">After distinguishes an early warning from a late consequence.</p><div class="case-windows" id="caseWindows"></div><div class="case-window-detail" id="caseWindowDetail"></div></div>
+    <div class="case-box" style="margin-top:13px"><div class="case-kicker" data-i18n="finalReportKicker">The final report</div><h3 style="margin-top:7px" id="finalTakeawayTitle">What Daniel would actually take away after the breakup</h3><div class="case-final" id="caseFinal"></div><div class="case-note"><b data-i18n="evidenceRuleLabel">Evidence rule:</b> <span data-i18n="evidenceRule">major conclusions should be supported by multiple dated observations. A dramatic quote can be shown, but repeated patterns and context are what make the conclusion credible.</span></div></div>
+  </section>
+
+
+  
+<section class="case-box breakup-answers">
+<div class="breakup-answers-head"><div><div class="case-kicker" data-i18n="qEyebrow">The questions that actually matter</div><h3 data-i18n="qTitle">So… why did this relationship end?</h3><p data-i18n="qText">After turns the evidence into clear, honest answers to the questions people can't stop asking after a breakup.</p></div></div>
+<div class="answer-list"><article class="answer-item open"><button class="answer-question" type="button" aria-expanded="true"><strong data-i18n="q1">Why did this happen?</strong><span class="answer-arrow">+</span></button><div class="answer-body"><div class="answer-lead" data-i18n="a1">Not one fight or one message: reciprocity dropped, conflicts were repaired less often and plans became vaguer — together, over months.</div></div></article><article class="answer-item"><button class="answer-question" type="button" aria-expanded="false"><strong data-i18n="q2">When did they actually start pulling away?</strong><span class="answer-arrow">+</span></button><div class="answer-body"><div class="answer-lead" data-i18n="a2">After gives two dates: the earliest repeated signal and the strongest structural shift. It shows when communication changed, not the private moment when feelings did.</div></div></article><article class="answer-item"><button class="answer-question" type="button" aria-expanded="false"><strong data-i18n="q3">Was there someone else?</strong><span class="answer-arrow">+</span></button><div class="answer-body"><div class="answer-lead" data-i18n="a3">Distance and shorter replies fit many explanations. Without direct evidence in the archive, After treats it as a hypothesis — never a fact.</div></div></article><article class="answer-item"><button class="answer-question" type="button" aria-expanded="false"><strong data-i18n="q4">Was it my fault?</strong><span class="answer-arrow">+</span></button><div class="answer-body"><div class="answer-lead" data-i18n="a4">The useful answer is usually neither yes nor no: which loops did you both feed, and what was outside your control? No fake blame percentages.</div></div></article><article class="answer-item"><button class="answer-question" type="button" aria-expanded="false"><strong data-i18n="q5">Could I have saved it?</strong><span class="answer-arrow">+</span></button><div class="answer-body"><div class="answer-lead" data-i18n="a5">The report marks windows: an early one when the pattern was new, a repair window when signals converged, and a late one where reversal was unlikely.</div></div></article><article class="answer-item"><button class="answer-question" type="button" aria-expanded="false"><strong data-i18n="q6">Why didn't we break up earlier?</strong><span class="answer-arrow">+</span></button><div class="answer-body"><div class="answer-lead" data-i18n="a6">Connection and decline can coexist for months. A timeline shows that balance instead of hunting for one final red flag.</div></div></article><article class="answer-item"><button class="answer-question" type="button" aria-expanded="false"><strong data-i18n="q7">What should I have noticed earlier?</strong><span class="answer-arrow">+</span></button><div class="answer-body"><div class="answer-lead" data-i18n="a7">Your own recurring pattern: what changed, how long it lasted and whether repair worked — so you can recognise the loop sooner next time.</div></div></article></div>
+</section>
+<div class="faq"><div class="eyebrow" data-i18n="faqEyebrow">FAQ</div><h3 data-i18n="faqTitle">Questions you might have.</h3><details><summary data-i18n="f1q">Do we have to have lived together?</summary><p data-i18n="f1a">No. The analysis uses only your communication history, so long-distance and weekend relationships work too.</p></details><details><summary data-i18n="f2q">What if we didn't text much?</summary><p data-i18n="f2a">Sparse periods stay in the timeline, with lower confidence when the evidence is thin.</p></details><details><summary data-i18n="f3q">Can it tell when someone stopped loving me?</summary><p data-i18n="f3a">No — private feelings can't be read from text. It shows when observable patterns changed and separates observation from interpretation.</p></details><details><summary data-i18n="f4q">Will I see the actual messages behind a conclusion?</summary><p data-i18n="f4a">That's the goal: every major finding links to a period and selected source messages.</p></details></div>
+<div class="footer" data-i18n="footer">This prototype demonstrates the product experience. A production version would process the export on a secure backend, keep evidence links to source messages and clearly separate observed patterns from interpretation. It cannot know another person's private feelings from text alone.</div>
+</section>
+
+</main>
+
+</div>
+
+
+<!-- TRANSLATIONS -->
+
+<script>
+
+const SUPPORTED=['en','ru','es','it','de'];
+function getLang(){try{const v=localStorage.getItem('after-language');if(v&&SUPPORTED.includes(v))return v}catch(e){}const n=(navigator.language||'en').slice(0,2).toLowerCase();return SUPPORTED.includes(n)?n:'en'}
+function saveLang(l){try{localStorage.setItem('after-language',l)}catch(e){}}
+const translations = {
+
+  en: {
+
+    navPrivacy:
+      'Private by design',
+
+    heroEyebrow:
+      'Relationship insights',
+
+    heroTitle:
+      'Your story is in your messages.',
+
+    heroText:
+      'Upload your conversation and discover how the relationship evolved over time — key turning points, communication patterns, recurring conflicts and the moments that changed the dynamic.',
+
+    dropTitle:
+      'Drop your conversation here',
+
+    dropText:
+      'WhatsApp · Telegram · Instagram · Messenger · VK · more',
+
+    or:
+      'or',
+
+    demoButton:
+      'Explore a sample report',
+
+    analyzeButton:
+      'Analyze my relationship',
+
+    importEyebrow:
+      'Import guide',
+
+    importTitle:
+      'Bring your conversation with you.',
+
+    importText:
+      "Choose the platform where your messages live. We'll show you how to export them and what to upload.",
+
+    waAndroid:
+      'Android',
+
+    waIphone:
+      'iPhone',
+
+    wa1:
+      'Open the conversation in WhatsApp.',
+
+    wa2:
+      'Tap ⋮ → More → Export chat.',
+
+    wa3:
+      'Choose Without media for a smaller export.',
+
+    wa4:
+      'Save or send the exported file to your computer.',
+
+    wa5:
+      'Open the conversation in WhatsApp.',
+
+    wa6:
+      'Tap the contact or group name at the top.',
+
+    wa7:
+      'Choose Export Chat.',
+
+    wa8:
+      'Choose Without Media and save the ZIP.',
+
+    waNote:
+      'WhatsApp Web and Desktop are useful for viewing messages, but the native export is done from your phone.',
+
+    telegramTitle:
+      'Telegram Desktop',
+
+    telegram1:
+      'Install and open Telegram Desktop.',
+
+    telegram2:
+      'Open the chat and use ⋮ → Export chat history.',
+
+    telegram3:
+      'For a wider export, open Settings → Advanced → Export Telegram Data.',
+
+    telegram4:
+      'Select Machine-readable JSON when available.',
+
+    telegramNote:
+      "Telegram's desktop app provides the most practical native export workflow.",
+
+    instagramTitle:
+      'Meta Accounts Center',
+
+    instagram1:
+      'Open Instagram → Settings and activity → Accounts Center.',
+
+    instagram2:
+      'Open Your information and permissions → Download your information.',
+
+    instagram3:
+      'Select your Instagram account and request a download.',
+
+    instagram4:
+      'Choose JSON when available and request the archive.',
+
+    instagram5:
+      'Download the archive and upload it here.',
+
+    instagramNote:
+      'The exact menu names may vary slightly depending on your Instagram version and language.',
+
+    messengerTitle:
+      'Meta Accounts Center',
+
+    messenger1:
+      'Open Facebook or Instagram and go to Accounts Center.',
+
+    messenger2:
+      'Open Your information and permissions → Download your information.',
+
+    messenger3:
+      'Select your Facebook/Messenger information.',
+
+    messenger4:
+      'Choose JSON and request the download.',
+
+    messenger5:
+      'Download the archive and upload it here.',
+
+    messengerNote:
+      'You may need to select the relevant account and message data inside the export settings.',
+
+    imessageTitle:
+      'Export options',
+
+    imessage1:
+      'Apple does not provide a simple native "Export Chat" button for iMessage.',
+
+    imessage2:
+      'On Mac, your Messages history is stored locally.',
+
+    imessage3:
+      'A compatible local export tool can convert the conversation into a usable format.',
+
+    imessage4:
+      'Upload the resulting text, HTML or JSON file.',
+
+    imessageNote:
+      'iMessage import can be marked as coming soon in the first MVP until a reliable export workflow is finalized.',
+
+    discordTitle:
+      'Data export',
+
+    discord1:
+      'Open Discord User Settings.',
+
+    discord2:
+      'Go to Data & Privacy and request your data package.',
+
+    discord3:
+      'Wait for Discord to prepare the archive.',
+
+    discord4:
+      'Download the archive and upload the relevant message data here.',
+
+    discordNote:
+      "Discord's export is account-level rather than a simple one-chat export.",
+
+    vkTitle:
+      'How to get your messages',
+
+    vk1:
+      'Open VK and go to your account settings.',
+
+    vk2:
+      'Look for the section related to privacy, account data or your data archive.',
+
+    vk3:
+      'Request an archive of your VK data.',
+
+    vk4:
+      'Once the archive is ready, download it to your computer.',
+
+    vk5:
+      'Find the message data inside the archive and upload it here.',
+
+    vkNote:
+      'The exact section name and archive structure may vary depending on the VK version and interface language.'
+
+  },
+
+
+  ru: {
+
+    navPrivacy:
+      'Приватность — в основе',
+
+    heroEyebrow:
+      'Анализ отношений',
+
+    heroTitle:
+      'Ваша история — прямо в переписке.',
+
+    heroText:
+      'Загрузите переписку и посмотрите, как менялись ваши отношения со временем: ключевые поворотные моменты, особенности общения, повторяющиеся конфликты и события, которые могли изменить вашу динамику.',
+
+    dropTitle:
+      'Загрузите переписку',
+
+    dropText:
+      'WhatsApp · Telegram · Instagram · Messenger · VK · и другие',
+
+    or:
+      'или',
+
+    demoButton:
+      'Посмотреть пример отчёта',
+
+    analyzeButton:
+      'Проанализировать отношения',
+
+    importEyebrow:
+      'Импорт переписки',
+
+    importTitle:
+      'Загрузите историю общения из своего мессенджера.',
+
+    importText:
+      'Выберите платформу, где хранится ваша переписка. Мы покажем, где найти экспорт и какой файл нужно загрузить.',
+
+    waAndroid:
+      'Android',
+
+    waIphone:
+      'iPhone',
+
+    wa1:
+      'Откройте нужный чат в WhatsApp.',
+
+    wa2:
+      'Нажмите ⋮ → Ещё → Экспорт чата.',
+
+    wa3:
+      'Выберите «Без медиа», чтобы получить небольшой файл.',
+
+    wa4:
+      'Сохраните файл или отправьте его на компьютер.',
+
+    wa5:
+      'Откройте нужный чат в WhatsApp.',
+
+    wa6:
+      'Нажмите на имя контакта или группы сверху.',
+
+    wa7:
+      'Выберите «Экспорт чата».',
+
+    wa8:
+      'Выберите «Без медиа» и сохраните ZIP-файл.',
+
+    waNote:
+      'WhatsApp Web и Desktop удобны для просмотра переписки, но экспорт выполняется непосредственно с телефона.',
+
+    telegramTitle:
+      'Telegram Desktop',
+
+    telegram1:
+      'Установите и откройте Telegram Desktop.',
+
+    telegram2:
+      'Откройте чат и выберите ⋮ → Экспорт истории чата.',
+
+    telegram3:
+      'Для более полного экспорта откройте Настройки → Продвинутые настройки → Экспорт данных Telegram.',
+
+    telegram4:
+      'Если доступно, выберите формат Machine-readable JSON.',
+
+    telegramNote:
+      'Для экспорта переписки удобнее всего использовать Telegram Desktop.',
+
+    instagramTitle:
+      'Центр аккаунтов Meta',
+
+    instagram1:
+      'Откройте Instagram → Настройки и действия → Центр аккаунтов.',
+
+    instagram2:
+      'Перейдите в «Ваша информация и разрешения» → «Скачать информацию».',
+
+    instagram3:
+      'Выберите свой аккаунт Instagram и запросите выгрузку.',
+
+    instagram4:
+      'Если доступен выбор формата, выберите JSON и запросите архив.',
+
+    instagram5:
+      'Когда архив будет готов, скачайте его и загрузите сюда.',
+
+    instagramNote:
+      'Названия разделов могут немного отличаться в зависимости от версии Instagram и языка интерфейса.',
+
+    messengerTitle:
+      'Центр аккаунтов Meta',
+
+    messenger1:
+      'Откройте Facebook или Instagram и перейдите в Центр аккаунтов.',
+
+    messenger2:
+      'Откройте «Ваша информация и разрешения» → «Скачать информацию».',
+
+    messenger3:
+      'Выберите данные Facebook/Messenger.',
+
+    messenger4:
+      'Выберите JSON и запросите выгрузку.',
+
+    messenger5:
+      'Скачайте готовый архив и загрузите его сюда.',
+
+    messengerNote:
+      'В настройках выгрузки может потребоваться отдельно выбрать нужный аккаунт и данные сообщений.',
+
+    imessageTitle:
+      'Как экспортировать iMessage',
+
+    imessage1:
+      'У Apple нет простой встроенной кнопки «Экспортировать чат» для iMessage.',
+
+    imessage2:
+      'На Mac история сообщений хранится локально.',
+
+    imessage3:
+      'Специальный инструмент экспорта может преобразовать переписку в подходящий формат.',
+
+    imessage4:
+      'Загрузите полученный TXT, HTML или JSON-файл.',
+
+    imessageNote:
+      'В первой версии MVP iMessage можно обозначить как Coming soon, пока мы не выберем надёжный способ экспорта.',
+
+    discordTitle:
+      'Выгрузка данных',
+
+    discord1:
+      'Откройте настройки пользователя Discord.',
+
+    discord2:
+      'Перейдите в раздел Data & Privacy и запросите архив своих данных.',
+
+    discord3:
+      'Подождите, пока Discord подготовит архив.',
+
+    discord4:
+      'Скачайте архив и загрузите сюда данные сообщений.',
+
+    discordNote:
+      'Discord выгружает данные на уровне аккаунта, а не отдельного чата.',
+
+    vkTitle:
+      'Как получить переписку',
+
+    vk1:
+      'Откройте ВКонтакте и перейдите в настройки аккаунта.',
+
+    vk2:
+      'Найдите раздел, связанный с приватностью, данными аккаунта или архивом данных.',
+
+    vk3:
+      'Запросите архив своих данных ВКонтакте.',
+
+    vk4:
+      'После подготовки архива скачайте его на компьютер.',
+
+    vk5:
+      'Найдите внутри архива данные сообщений и загрузите их сюда.',
+
+    vkNote:
+      'В зависимости от версии ВКонтакте и языка интерфейса название раздела и структура архива могут отличаться.'
+
+  },
+
+
+  es: {
+
+    navPrivacy:
+      'Privacidad desde el principio',
+
+    heroEyebrow:
+      'Análisis de relaciones',
+
+    heroTitle:
+      'Tu historia está en tus mensajes.',
+
+    heroText:
+      'Sube tu conversación y descubre cómo evolucionó vuestra relación con el tiempo: momentos clave, patrones de comunicación, conflictos recurrentes y cambios que marcaron vuestra dinámica.',
+
+    dropTitle:
+      'Sube tu conversación',
+
+    dropText:
+      'WhatsApp · Telegram · Instagram · Messenger · VK · y más',
+
+    or:
+      'o',
+
+    demoButton:
+      'Ver un informe de ejemplo',
+
+    analyzeButton:
+      'Analizar mi relación',
+
+    importEyebrow:
+      'Guía de importación',
+
+    importTitle:
+      'Trae tu historia contigo.',
+
+    importText:
+      'Elige dónde están tus mensajes y te mostraremos cómo exportarlos y qué archivo necesitas subir.',
+
+    waAndroid:
+      'Android',
+
+    waIphone:
+      'iPhone',
+
+    wa1:
+      'Abre la conversación en WhatsApp.',
+
+    wa2:
+      'Pulsa ⋮ → Más → Exportar chat.',
+
+    wa3:
+      'Elige «Sin archivos multimedia» para obtener un archivo más pequeño.',
+
+    wa4:
+      'Guarda el archivo o envíatelo al ordenador.',
+
+    wa5:
+      'Abre la conversación en WhatsApp.',
+
+    wa6:
+      'Pulsa el nombre del contacto o grupo en la parte superior.',
+
+    wa7:
+      'Selecciona «Exportar chat».',
+
+    wa8:
+      'Elige «Sin archivos multimedia» y guarda el ZIP.',
+
+    waNote:
+      'WhatsApp Web y Desktop sirven para consultar los mensajes, pero la exportación se realiza desde el teléfono.',
+
+    telegramTitle:
+      'Telegram Desktop',
+
+    telegram1:
+      'Instala y abre Telegram Desktop.',
+
+    telegram2:
+      'Abre el chat y selecciona ⋮ → Exportar historial del chat.',
+
+    telegram3:
+      'Para una exportación más completa, ve a Ajustes → Avanzado → Exportar datos de Telegram.',
+
+    telegram4:
+      'Cuando esté disponible, selecciona JSON legible por máquina.',
+
+    telegramNote:
+      'Telegram Desktop ofrece la forma más práctica de exportar las conversaciones.',
+
+    instagramTitle:
+      'Centro de cuentas de Meta',
+
+    instagram1:
+      'Abre Instagram → Configuración y actividad → Centro de cuentas.',
+
+    instagram2:
+      'Ve a Tu información y permisos → Descargar tu información.',
+
+    instagram3:
+      'Selecciona tu cuenta de Instagram y solicita la descarga.',
+
+    instagram4:
+      'Elige JSON cuando esté disponible y solicita el archivo.',
+
+    instagram5:
+      'Descarga el archivo y súbelo aquí.',
+
+    instagramNote:
+      'Los nombres exactos de los menús pueden variar según la versión y el idioma de Instagram.',
+
+    messengerTitle:
+      'Centro de cuentas de Meta',
+
+    messenger1:
+      'Abre Facebook o Instagram y entra en el Centro de cuentas.',
+
+    messenger2:
+      'Ve a Tu información y permisos → Descargar tu información.',
+
+    messenger3:
+      'Selecciona la información de Facebook/Messenger.',
+
+    messenger4:
+      'Elige JSON y solicita la descarga.',
+
+    messenger5:
+      'Descarga el archivo y súbelo aquí.',
+
+    messengerNote:
+      'Es posible que tengas que seleccionar la cuenta y los datos de mensajes que quieres incluir.',
+
+    imessageTitle:
+      'Opciones de exportación',
+
+    imessage1:
+      'Apple no ofrece un botón nativo sencillo para exportar conversaciones de iMessage.',
+
+    imessage2:
+      'En Mac, el historial de Mensajes se guarda localmente.',
+
+    imessage3:
+      'Una herramienta de exportación compatible puede convertir la conversación a un formato utilizable.',
+
+    imessage4:
+      'Sube el archivo TXT, HTML o JSON resultante.',
+
+    imessageNote:
+      'Para el primer MVP, iMessage puede aparecer como próximamente hasta definir un método de exportación fiable.',
+
+    discordTitle:
+      'Exportar datos',
+
+    discord1:
+      'Abre los ajustes de usuario de Discord.',
+
+    discord2:
+      'Ve a Data & Privacy y solicita tu paquete de datos.',
+
+    discord3:
+      'Espera a que Discord prepare el archivo.',
+
+    discord4:
+      'Descarga el archivo y sube aquí los datos de mensajes.',
+
+    discordNote:
+      'La exportación de Discord se realiza a nivel de cuenta, no como una exportación sencilla de un solo chat.',
+
+    vkTitle:
+      'Cómo obtener tus mensajes',
+
+    vk1:
+      'Abre VK y entra en la configuración de tu cuenta.',
+
+    vk2:
+      'Busca la sección relacionada con privacidad, datos de la cuenta o archivo de datos.',
+
+    vk3:
+      'Solicita un archivo con tus datos de VK.',
+
+    vk4:
+      'Cuando esté listo, descárgalo en tu ordenador.',
+
+    vk5:
+      'Busca los datos de mensajes dentro del archivo y súbelos aquí.',
+
+    vkNote:
+      'El nombre de la sección y la estructura del archivo pueden variar según la versión y el idioma de VK.'
+
+  },
+
+
+  it: {
+
+    navPrivacy:
+      'Privacy al primo posto',
+
+    heroEyebrow:
+      'Analisi della relazione',
+
+    heroTitle:
+      'La vostra storia è dentro i vostri messaggi.',
+
+    heroText:
+      'Carica la conversazione e scopri come è cambiata la relazione nel tempo: momenti decisivi, dinamiche di comunicazione, conflitti ricorrenti e cambiamenti che hanno segnato il vostro rapporto.',
+
+    dropTitle:
+      'Carica la tua conversazione',
+
+    dropText:
+      'WhatsApp · Telegram · Instagram · Messenger · VK · e altro',
+
+    or:
+      'oppure',
+
+    demoButton:
+      'Guarda un report di esempio',
+
+    analyzeButton:
+      'Analizza la mia relazione',
+
+    importEyebrow:
+      'Guida all’importazione',
+
+    importTitle:
+      'Porta con te la vostra storia.',
+
+    importText:
+      'Scegli dove si trova la tua conversazione e ti mostreremo come esportarla e quale file caricare.',
+
+    waAndroid:
+      'Android',
+
+    waIphone:
+      'iPhone',
+
+    wa1:
+      'Apri la conversazione su WhatsApp.',
+
+    wa2:
+      'Tocca ⋮ → Altro → Esporta chat.',
+
+    wa3:
+      'Scegli «Senza media» per ottenere un file più leggero.',
+
+    wa4:
+      'Salva il file o invialo al computer.',
+
+    wa5:
+      'Apri la conversazione su WhatsApp.',
+
+    wa6:
+      'Tocca il nome del contatto o del gruppo in alto.',
+
+    wa7:
+      'Seleziona «Esporta chat».',
+
+    wa8:
+      'Scegli «Senza media» e salva il file ZIP.',
+
+    waNote:
+      'WhatsApp Web e Desktop sono utili per leggere i messaggi, ma l’esportazione viene effettuata dal telefono.',
+
+    telegramTitle:
+      'Telegram Desktop',
+
+    telegram1:
+      'Installa e apri Telegram Desktop.',
+
+    telegram2:
+      'Apri la chat e seleziona ⋮ → Esporta cronologia chat.',
+
+    telegram3:
+      'Per un’esportazione più completa, vai su Impostazioni → Avanzate → Esporta dati Telegram.',
+
+    telegram4:
+      'Quando disponibile, seleziona il formato JSON leggibile dalla macchina.',
+
+    telegramNote:
+      'Telegram Desktop offre il metodo più pratico per esportare le conversazioni.',
+
+    instagramTitle:
+      'Centro gestione account Meta',
+
+    instagram1:
+      'Apri Instagram → Impostazioni e attività → Centro gestione account.',
+
+    instagram2:
+      'Vai su Le tue informazioni e autorizzazioni → Scarica le tue informazioni.',
+
+    instagram3:
+      'Seleziona il tuo account Instagram e richiedi il download.',
+
+    instagram4:
+      'Quando disponibile, scegli JSON e richiedi l’archivio.',
+
+    instagram5:
+      'Scarica l’archivio e caricalo qui.',
+
+    instagramNote:
+      'I nomi esatti dei menu possono variare leggermente in base alla versione e alla lingua di Instagram.',
+
+    messengerTitle:
+      'Centro gestione account Meta',
+
+    messenger1:
+      'Apri Facebook o Instagram e accedi al Centro gestione account.',
+
+    messenger2:
+      'Vai su Le tue informazioni e autorizzazioni → Scarica le tue informazioni.',
+
+    messenger3:
+      'Seleziona le informazioni di Facebook/Messenger.',
+
+    messenger4:
+      'Scegli JSON e richiedi il download.',
+
+    messenger5:
+      'Scarica l’archivio e caricalo qui.',
+
+    messengerNote:
+      'Potrebbe essere necessario selezionare l’account e i dati dei messaggi da includere.',
+
+    imessageTitle:
+      'Opzioni di esportazione',
+
+    imessage1:
+      'Apple non offre un semplice pulsante nativo per esportare le conversazioni iMessage.',
+
+    imessage2:
+      'Su Mac, la cronologia dei messaggi viene salvata localmente.',
+
+    imessage3:
+      'Uno strumento di esportazione compatibile può convertire la conversazione in un formato utilizzabile.',
+
+    imessage4:
+      'Carica il file TXT, HTML o JSON ottenuto.',
+
+    imessageNote:
+      'Per il primo MVP, iMessage può essere indicato come prossimamente disponibile finché non definiamo un metodo di esportazione affidabile.',
+
+    discordTitle:
+      'Esportazione dei dati',
+
+    discord1:
+      'Apri le impostazioni utente di Discord.',
+
+    discord2:
+      'Vai su Data & Privacy e richiedi il tuo pacchetto dati.',
+
+    discord3:
+      'Attendi che Discord prepari l’archivio.',
+
+    discord4:
+      'Scarica l’archivio e carica qui i dati relativi ai messaggi.',
+
+    discordNote:
+      'L’esportazione di Discord riguarda l’intero account, non una singola chat.',
+
+    vkTitle:
+      'Come ottenere i tuoi messaggi',
+
+    vk1:
+      'Apri VK e vai nelle impostazioni del tuo account.',
+
+    vk2:
+      'Cerca la sezione relativa a privacy, dati dell’account o archivio dei dati.',
+
+    vk3:
+      'Richiedi un archivio dei tuoi dati VK.',
+
+    vk4:
+      'Quando l’archivio è pronto, scaricalo sul computer.',
+
+    vk5:
+      'Trova i dati dei messaggi nell’archivio e caricali qui.',
+
+    vkNote:
+      'Il nome della sezione e la struttura dell’archivio possono variare in base alla versione e alla lingua di VK.'
+
+  },
+
+
+  de: {
+
+    navPrivacy:
+      'Datenschutz von Anfang an',
+
+    heroEyebrow:
+      'Beziehungsanalyse',
+
+    heroTitle:
+      'Eure Geschichte steckt in euren Nachrichten.',
+
+    heroText:
+      'Lade eure Unterhaltung hoch und entdecke, wie sich eure Beziehung im Laufe der Zeit verändert hat — wichtige Wendepunkte, Kommunikationsmuster, wiederkehrende Konflikte und Veränderungen in eurer Dynamik.',
+
+    dropTitle:
+      'Unterhaltung hochladen',
+
+    dropText:
+      'WhatsApp · Telegram · Instagram · Messenger · VK · mehr',
+
+    or:
+      'oder',
+
+    demoButton:
+      'Beispielbericht ansehen',
+
+    analyzeButton:
+      'Beziehung analysieren',
+
+    importEyebrow:
+      'Import-Anleitung',
+
+    importTitle:
+      'Bring eure Geschichte mit.',
+
+    importText:
+      'Wähle die Plattform, auf der eure Nachrichten gespeichert sind. Wir zeigen dir, wie du sie exportierst und welche Datei du hochladen musst.',
+
+    waAndroid:
+      'Android',
+
+    waIphone:
+      'iPhone',
+
+    wa1:
+      'Öffne den Chat in WhatsApp.',
+
+    wa2:
+      'Tippe auf ⋮ → Mehr → Chat exportieren.',
+
+    wa3:
+      'Wähle „Ohne Medien“, damit die Datei kleiner bleibt.',
+
+    wa4:
+      'Speichere die Datei oder sende sie an deinen Computer.',
+
+    wa5:
+      'Öffne den Chat in WhatsApp.',
+
+    wa6:
+      'Tippe oben auf den Namen des Kontakts oder der Gruppe.',
+
+    wa7:
+      'Wähle „Chat exportieren“.',
+
+    wa8:
+      'Wähle „Ohne Medien“ und speichere die ZIP-Datei.',
+
+    waNote:
+      'WhatsApp Web und Desktop eignen sich zum Lesen der Nachrichten, der eigentliche Export erfolgt jedoch über das Smartphone.',
+
+    telegramTitle:
+      'Telegram Desktop',
+
+    telegram1:
+      'Installiere und öffne Telegram Desktop.',
+
+    telegram2:
+      'Öffne den Chat und wähle ⋮ → Chatverlauf exportieren.',
+
+    telegram3:
+      'Für einen umfangreicheren Export gehe zu Einstellungen → Erweitert → Telegram-Daten exportieren.',
+
+    telegram4:
+      'Wähle, falls verfügbar, das maschinenlesbare JSON-Format.',
+
+    telegramNote:
+      'Telegram Desktop bietet die praktischste Möglichkeit, Chats nativ zu exportieren.',
+
+    instagramTitle:
+      'Meta-Kontenübersicht',
+
+    instagram1:
+      'Öffne Instagram → Einstellungen und Aktivitäten → Kontenübersicht.',
+
+    instagram2:
+      'Gehe zu Deine Informationen und Berechtigungen → Deine Informationen herunterladen.',
+
+    instagram3:
+      'Wähle dein Instagram-Konto und fordere den Download an.',
+
+    instagram4:
+      'Wähle, falls verfügbar, JSON und fordere das Archiv an.',
+
+    instagram5:
+      'Lade das Archiv herunter und lade es hier hoch.',
+
+    instagramNote:
+      'Die genaue Bezeichnung der Menüs kann je nach Instagram-Version und Sprache leicht abweichen.',
+
+    messengerTitle:
+      'Meta-Kontenübersicht',
+
+    messenger1:
+      'Öffne Facebook oder Instagram und gehe zur Kontenübersicht.',
+
+    messenger2:
+      'Gehe zu Deine Informationen und Berechtigungen → Deine Informationen herunterladen.',
+
+    messenger3:
+      'Wähle deine Facebook-/Messenger-Daten.',
+
+    messenger4:
+      'Wähle JSON und fordere den Download an.',
+
+    messenger5:
+      'Lade das Archiv herunter und lade es hier hoch.',
+
+    messengerNote:
+      'Möglicherweise musst du das gewünschte Konto und die einzuschließenden Nachrichten auswählen.',
+
+    imessageTitle:
+      'Exportmöglichkeiten',
+
+    imessage1:
+      'Apple bietet keine einfache native Funktion zum Exportieren eines iMessage-Chats.',
+
+    imessage2:
+      'Auf dem Mac wird dein Nachrichtenverlauf lokal gespeichert.',
+
+    imessage3:
+      'Ein kompatibles Export-Tool kann die Unterhaltung in ein geeignetes Format umwandeln.',
+
+    imessage4:
+      'Lade anschließend die TXT-, HTML- oder JSON-Datei hoch.',
+
+    imessageNote:
+      'Für den ersten MVP kann iMessage als „Coming soon“ gekennzeichnet werden, bis ein zuverlässiger Exportweg feststeht.',
+
+    discordTitle:
+      'Datenexport',
+
+    discord1:
+      'Öffne die Benutzereinstellungen von Discord.',
+
+    discord2:
+      'Gehe zu Data & Privacy und fordere dein Datenpaket an.',
+
+    discord3:
+      'Warte, bis Discord das Archiv vorbereitet hat.',
+
+    discord4:
+      'Lade das Archiv herunter und lade die relevanten Nachrichtendaten hier hoch.',
+
+    discordNote:
+      'Der Discord-Export erfolgt auf Kontoebene und nicht als einfacher Export eines einzelnen Chats.',
+
+    vkTitle:
+      'So bekommst du deine Nachrichten',
+
+    vk1:
+      'Öffne VK und gehe zu den Kontoeinstellungen.',
+
+    vk2:
+      'Suche nach dem Bereich für Datenschutz, Kontodaten oder dein Datenarchiv.',
+
+    vk3:
+      'Fordere ein Archiv deiner VK-Daten an.',
+
+    vk4:
+      'Lade das Archiv herunter, sobald es bereit ist.',
+
+    vk5:
+      'Suche die Nachrichtendaten im Archiv und lade sie hier hoch.',
+
+    vkNote:
+      'Die genaue Bezeichnung und Struktur des Archivs kann je nach VK-Version und Sprache variieren.'
+
+  }
+
+};
+
+
+/* DEMO LOCALIZATION */
+const demoUiTranslations = {
+  en:{caseEyebrow:'A concrete example · fictional relationship',caseKicker:'After case file · #AF-2047',caseDates:'January 2019 → September 2024.',caseIntro:'58,416 messages across WhatsApp and Telegram. The point of the report is not to say “good” or “bad” — it is to reconstruct what changed, when it changed, and what evidence supports each conclusion.',casePillMessages:'58,416 messages',casePillDuration:'5y 8m',casePillPhases:'4 major phases',casePillTurns:'27 turning points',caseShiftKicker:'Strongest structural shift',caseShiftDate:'October 2023',caseShiftText:'Not the breakup date. The archive shows the communication system changing almost 11 months before the final message.',caseAnswerLabel:"After's answer:",caseVerdict:'reciprocity, conflict repair and concrete future planning all weaken in the same period. That convergence makes October 2023 much more important than any single dramatic message.',kpiHistory:'history reconstructed',kpiMessages:'messages',kpiPhases:'relationship phases',kpiCandidates:'turning-point candidates',kpiShift:'shift → breakup',kpiHigh:'High',kpiConfidence:'main-pattern confidence',askReport:'Ask the report',askTitle:'The answer changes depending on the question.',askText:'Click through the questions a real person might ask immediately after a breakup.',tabStory:'What happened?',tabWhen:'When did it start?',tabFeelings:'Was she pulling away?',tabOther:'Could there be someone else?',tabAction:'Could I have changed it?',timelineKicker:'Timeline',timelineTitle:'The relationship signal over time',timelineText:'Illustrative composite of reciprocity, repair and future-oriented communication. Click a period.',beforeKicker:'Before vs after',beforeTitle:'What actually changed?',beforeText:'These are observable communication measures — not “love scores”.',metricReciprocity:'Reciprocity',metricRepair:'Conflict repair',metricPlans:'Future plans',metricAffection:'Affectionate language',importantLabel:'Important:',importantText:'After would never turn these into “she loved you 37%”. They describe changes in communication behavior.',evidenceKicker:'Evidence layer',evidenceTitle:'Exact messages behind the conclusion.',evidenceText:'Click “Why does this matter?” to expand the interpretation. The message alone is never the whole conclusion.',interventionKicker:'Intervention analysis',interventionTitle:'When could something realistically have been done?',interventionText:'After distinguishes an early warning from a late consequence.',finalReportKicker:'The final report',evidenceRuleLabel:'Evidence rule:',evidenceRule:'major conclusions should be supported by multiple dated observations. A dramatic quote can be shown, but repeated patterns and context are what make the conclusion credible.'},
+  ru:{caseEyebrow:'Конкретный пример · вымышленная история отношений',caseKicker:'Кейс After · #AF-2047',caseDates:'Январь 2019 → сентябрь 2024.',caseIntro:'58 416 сообщений в WhatsApp и Telegram. Цель отчёта — не назвать отношения «хорошими» или «плохими», а восстановить, что именно изменилось, когда это произошло и какие доказательства поддерживают каждый вывод.',casePillMessages:'58 416 сообщений',casePillDuration:'5 лет 8 мес.',casePillPhases:'4 основных этапа',casePillTurns:'27 точек поворота',caseShiftKicker:'Самый сильный структурный сдвиг',caseShiftDate:'Октябрь 2023',caseShiftText:'Это не дата расставания. Архив показывает изменение системы общения почти за 11 месяцев до финального сообщения.',caseAnswerLabel:'Ответ After:',caseVerdict:'взаимность, восстановление после конфликтов и конкретность планов на будущее ослабевают в один и тот же период. Поэтому октябрь 2023-го важнее любого отдельного драматичного сообщения.',kpiHistory:'история восстановлена',kpiMessages:'сообщений',kpiPhases:'этапа отношений',kpiCandidates:'кандидатов в точки поворота',kpiShift:'сдвиг → расставание',kpiHigh:'Высокая',kpiConfidence:'уверенность в основном паттерне',askReport:'Спросите отчёт',askTitle:'Ответ зависит от того, какой вопрос вы задаёте.',askText:'Нажмите на вопросы, которые человек реально задаёт себе сразу после болезненного расставания.',tabStory:'Что произошло?',tabWhen:'Когда это началось?',tabFeelings:'Она действительно отдалялась?',tabOther:'Мог ли быть кто-то другой?',tabAction:'Мог ли я это изменить?',timelineKicker:'Хронология',timelineTitle:'Сигнал отношений во времени',timelineText:'Иллюстративная комбинация взаимности, восстановления и коммуникации о будущем. Нажмите на период.',beforeKicker:'До и после',beforeTitle:'Что действительно изменилось?',beforeText:'Это наблюдаемые показатели коммуникации, а не «проценты любви».',metricReciprocity:'Взаимность',metricRepair:'Восстановление после конфликтов',metricPlans:'Планы на будущее',metricAffection:'Язык привязанности',importantLabel:'Важно:',importantText:'After никогда не превратит это в «она любила вас на 37%». Эти показатели описывают изменения в поведении общения.',evidenceKicker:'Слой доказательств',evidenceTitle:'Точные сообщения, стоящие за выводом.',evidenceText:'Нажмите «Почему это важно?», чтобы раскрыть интерпретацию. Само сообщение никогда не является всем выводом.',interventionKicker:'Анализ вмешательства',interventionTitle:'Когда ещё можно было реально что-то изменить?',interventionText:'After отличает ранний сигнал от позднего последствия.',finalReportKicker:'Финальный отчёт',evidenceRuleLabel:'Правило доказательств:',evidenceRule:'важные выводы должны опираться на несколько наблюдений с датами. Драматичную цитату можно показать, но достоверность создают повторяющиеся паттерны и контекст.'},
+  es:{caseEyebrow:'Ejemplo concreto · relación ficticia',caseKicker:'Caso After · #AF-2047',caseDates:'Enero de 2019 → septiembre de 2024.',caseIntro:'58.416 mensajes de WhatsApp y Telegram. El objetivo no es decir «bien» o «mal», sino reconstruir qué cambió, cuándo cambió y qué evidencia respalda cada conclusión.',casePillMessages:'58.416 mensajes',casePillDuration:'5 años 8 meses',casePillPhases:'4 fases principales',casePillTurns:'27 puntos de inflexión',caseShiftKicker:'Cambio estructural más fuerte',caseShiftDate:'Octubre de 2023',caseShiftText:'No es la fecha de la ruptura. El archivo muestra que el sistema de comunicación cambió casi 11 meses antes del mensaje final.',caseAnswerLabel:'Respuesta de After:',caseVerdict:'la reciprocidad, la reparación de conflictos y la concreción de los planes futuros se debilitan en el mismo periodo. Esa convergencia hace que octubre de 2023 sea más importante que cualquier mensaje dramático aislado.',kpiHistory:'historia reconstruida',kpiMessages:'mensajes',kpiPhases:'fases de la relación',kpiCandidates:'posibles puntos de inflexión',kpiShift:'cambio → ruptura',kpiHigh:'Alta',kpiConfidence:'confianza en el patrón principal',askReport:'Pregunta al informe',askTitle:'La respuesta cambia según la pregunta.',askText:'Haz clic en las preguntas que una persona real podría hacerse justo después de una ruptura.',tabStory:'¿Qué pasó?',tabWhen:'¿Cuándo empezó?',tabFeelings:'¿Sofía se estaba alejando?',tabOther:'¿Podría haber otra persona?',tabAction:'¿Podría haberlo cambiado?',timelineKicker:'Cronología',timelineTitle:'La señal de la relación a lo largo del tiempo',timelineText:'Composición ilustrativa de reciprocidad, reparación y comunicación orientada al futuro. Haz clic en un periodo.',beforeKicker:'Antes vs. después',beforeTitle:'¿Qué cambió realmente?',beforeText:'Son medidas observables de comunicación, no «puntuaciones de amor».',metricReciprocity:'Reciprocidad',metricRepair:'Reparación de conflictos',metricPlans:'Planes de futuro',metricAffection:'Lenguaje afectivo',importantLabel:'Importante:',importantText:'After nunca convertiría esto en «te quería un 37%». Describen cambios en la conducta comunicativa.',evidenceKicker:'Capa de evidencia',evidenceTitle:'Mensajes exactos detrás de la conclusión.',evidenceText:'Haz clic en «¿Por qué importa?» para ampliar la interpretación. El mensaje por sí solo nunca es toda la conclusión.',interventionKicker:'Análisis de intervención',interventionTitle:'¿Cuándo se podría haber hecho algo de forma realista?',interventionText:'After distingue una señal temprana de una consecuencia tardía.',finalReportKicker:'El informe final',evidenceRuleLabel:'Regla de evidencia:',evidenceRule:'las conclusiones importantes deben apoyarse en varias observaciones fechadas. Una cita dramática puede mostrarse, pero los patrones repetidos y el contexto son lo que hacen creíble la conclusión.'},
+  it:{caseEyebrow:'Un esempio concreto · relazione fittizia',caseKicker:'Caso After · #AF-2047',caseDates:'Gennaio 2019 → settembre 2024.',caseIntro:'58.416 messaggi tra WhatsApp e Telegram. Lo scopo non è dire «bene» o «male», ma ricostruire cosa è cambiato, quando e quali prove sostengono ogni conclusione.',casePillMessages:'58.416 messaggi',casePillDuration:'5 anni 8 mesi',casePillPhases:'4 fasi principali',casePillTurns:'27 punti di svolta',caseShiftKicker:'Cambiamento strutturale più forte',caseShiftDate:'Ottobre 2023',caseShiftText:'Non è la data della rottura. L’archivio mostra che il sistema di comunicazione cambia quasi 11 mesi prima del messaggio finale.',caseAnswerLabel:'Risposta di After:',caseVerdict:'reciprocità, riparazione dei conflitti e concretezza dei piani futuri si indeboliscono nello stesso periodo. Questa convergenza rende ottobre 2023 molto più importante di qualsiasi singolo messaggio drammatico.',kpiHistory:'storia ricostruita',kpiMessages:'messaggi',kpiPhases:'fasi della relazione',kpiCandidates:'candidati punti di svolta',kpiShift:'svolta → rottura',kpiHigh:'Alta',kpiConfidence:'confidenza nel pattern principale',askReport:'Chiedi al report',askTitle:'La risposta cambia in base alla domanda.',askText:'Clicca sulle domande che una persona reale potrebbe porsi subito dopo una rottura.',tabStory:'Cosa è successo?',tabWhen:'Quando è iniziato?',tabFeelings:'Giulia si stava allontanando?',tabOther:'Potrebbe esserci stata un’altra persona?',tabAction:'Avrei potuto cambiare le cose?',timelineKicker:'Cronologia',timelineTitle:'Il segnale della relazione nel tempo',timelineText:'Composizione illustrativa di reciprocità, riparazione e comunicazione orientata al futuro. Clicca su un periodo.',beforeKicker:'Prima vs dopo',beforeTitle:'Cosa è cambiato davvero?',beforeText:'Sono misure osservabili della comunicazione, non «punteggi d’amore».',metricReciprocity:'Reciprocità',metricRepair:'Riparazione dei conflitti',metricPlans:'Piani futuri',metricAffection:'Linguaggio affettuoso',importantLabel:'Importante:',importantText:'After non trasformerebbe mai questi dati in «ti amava al 37%». Descrivono cambiamenti nel comportamento comunicativo.',evidenceKicker:'Livello delle prove',evidenceTitle:'I messaggi esatti dietro la conclusione.',evidenceText:'Clicca su «Perché è importante?» per aprire l’interpretazione. Il messaggio da solo non è mai tutta la conclusione.',interventionKicker:'Analisi dell’intervento',interventionTitle:'Quando si sarebbe potuto fare realisticamente qualcosa?',interventionText:'After distingue un segnale iniziale da una conseguenza tardiva.',finalReportKicker:'Il report finale',evidenceRuleLabel:'Regola delle prove:',evidenceRule:'le conclusioni importanti devono essere sostenute da più osservazioni datate. Una citazione drammatica può essere mostrata, ma sono i pattern ricorrenti e il contesto a rendere credibile la conclusione.'},
+  de:{caseEyebrow:'Konkretes Beispiel · fiktive Beziehung',caseKicker:'After-Fallakte · #AF-2047',caseDates:'Januar 2019 → September 2024.',caseIntro:'58.416 Nachrichten aus WhatsApp und Telegram. Es geht nicht darum, die Beziehung als «gut» oder «schlecht» zu bewerten, sondern zu rekonstruieren, was sich wann verändert hat und welche Belege die Schlussfolgerungen stützen.',casePillMessages:'58.416 Nachrichten',casePillDuration:'5 Jahre 8 Monate',casePillPhases:'4 große Phasen',casePillTurns:'27 Wendepunkte',caseShiftKicker:'Stärkste strukturelle Veränderung',caseShiftDate:'Oktober 2023',caseShiftText:'Nicht das Trennungsdatum. Das Archiv zeigt eine Veränderung des Kommunikationssystems fast 11 Monate vor der letzten Nachricht.',caseAnswerLabel:'Antwort von After:',caseVerdict:'Gegenseitigkeit, Konfliktreparatur und konkrete Zukunftspläne werden im selben Zeitraum schwächer. Diese Konvergenz macht Oktober 2023 wichtiger als jede einzelne dramatische Nachricht.',kpiHistory:'Geschichte rekonstruiert',kpiMessages:'Nachrichten',kpiPhases:'Beziehungsphasen',kpiCandidates:'Wendepunkt-Kandidaten',kpiShift:'Veränderung → Trennung',kpiHigh:'Hoch',kpiConfidence:'Sicherheit des Hauptmusters',askReport:'Bericht fragen',askTitle:'Die Antwort hängt von der Frage ab.',askText:'Klicke auf die Fragen, die sich Menschen direkt nach einer schmerzhaften Trennung tatsächlich stellen.',tabStory:'Was ist passiert?',tabWhen:'Wann hat es angefangen?',tabFeelings:'Hat Anna sich zurückgezogen?',tabOther:'Könnte es jemand anderen gegeben haben?',tabAction:'Hätte ich etwas ändern können?',timelineKicker:'Zeitverlauf',timelineTitle:'Das Beziehungssignal im Zeitverlauf',timelineText:'Illustrative Kombination aus Gegenseitigkeit, Reparatur und zukunftsorientierter Kommunikation. Klicke auf einen Zeitraum.',beforeKicker:'Vorher vs. nachher',beforeTitle:'Was hat sich tatsächlich verändert?',beforeText:'Das sind beobachtbare Kommunikationsmaße, keine «Liebeswerte».',metricReciprocity:'Gegenseitigkeit',metricRepair:'Konfliktreparatur',metricPlans:'Zukunftspläne',metricAffection:'Zuneigungssprache',importantLabel:'Wichtig:',importantText:'After würde daraus niemals «sie liebte dich zu 37 %» machen. Die Werte beschreiben Veränderungen im Kommunikationsverhalten.',evidenceKicker:'Belegebene',evidenceTitle:'Die exakten Nachrichten hinter der Schlussfolgerung.',evidenceText:'Klicke auf «Warum ist das wichtig?», um die Interpretation zu öffnen. Die Nachricht allein ist nie die gesamte Schlussfolgerung.',interventionKicker:'Interventionsanalyse',interventionTitle:'Wann hätte man realistisch noch etwas tun können?',interventionText:'After unterscheidet ein frühes Warnsignal von einer späten Folge.',finalReportKicker:'Der Abschlussbericht',evidenceRuleLabel:'Belegregel:',evidenceRule:'Wichtige Schlussfolgerungen sollten durch mehrere datierte Beobachtungen gestützt werden. Ein dramatisches Zitat kann gezeigt werden, aber wiederkehrende Muster und Kontext machen die Schlussfolgerung glaubwürdig.'}
+};
+
+// Extend the existing language system without replacing its translations.
+Object.keys(demoUiTranslations).forEach(function(l){ Object.assign(translations[l], demoUiTranslations[l]); });
+const extraI18n = {"en": {"docTitle": "After — Relationship Insights", "upHelp": "Don't have the export yet?", "upHow": "How to get my files →", "fileReady": "Ready to analyze", "prep": "Preparing your conversation…", "p1": "Parsing conversation…", "p2": "Mapping the relationship timeline…", "p3": "Detecting communication patterns…", "p4": "Finding turning points…", "p5": "Building evidence-linked report…", "p6": "Complete", "upl": "Upload:", "tgt": "Target:", "upArch": "export archive / JSON", "upVk": "VK data archive", "kpiDur": "5y 8m", "kpiGap": "11 mo", "qEyebrow": "The questions that actually matter", "qTitle": "So… why did this relationship end?", "qText": "After turns the evidence into clear, honest answers to the questions people can't stop asking after a breakup.", "q1": "Why did this happen?", "a1": "Not one fight or one message: reciprocity dropped, conflicts were repaired less often and plans became vaguer — together, over months.", "q2": "When did they actually start pulling away?", "a2": "After gives two dates: the earliest repeated signal and the strongest structural shift. It shows when communication changed, not the private moment when feelings did.", "q3": "Was there someone else?", "a3": "Distance and shorter replies fit many explanations. Without direct evidence in the archive, After treats it as a hypothesis — never a fact.", "q4": "Was it my fault?", "a4": "The useful answer is usually neither yes nor no: which loops did you both feed, and what was outside your control? No fake blame percentages.", "q5": "Could I have saved it?", "a5": "The report marks windows: an early one when the pattern was new, a repair window when signals converged, and a late one where reversal was unlikely.", "q6": "Why didn't we break up earlier?", "a6": "Connection and decline can coexist for months. A timeline shows that balance instead of hunting for one final red flag.", "q7": "What should I have noticed earlier?", "a7": "Your own recurring pattern: what changed, how long it lasted and whether repair worked — so you can recognise the loop sooner next time.", "faqEyebrow": "FAQ", "faqTitle": "Questions you might have.", "f1q": "Do we have to have lived together?", "f1a": "No. The analysis uses only your communication history, so long-distance and weekend relationships work too.", "f2q": "What if we didn't text much?", "f2a": "Sparse periods stay in the timeline, with lower confidence when the evidence is thin.", "f3q": "Can it tell when someone stopped loving me?", "f3a": "No — private feelings can't be read from text. It shows when observable patterns changed and separates observation from interpretation.", "f4q": "Will I see the actual messages behind a conclusion?", "f4a": "That's the goal: every major finding links to a period and selected source messages.", "footer": "This prototype demonstrates the product experience. A production version would process the export on a secure backend, keep evidence links to source messages and clearly separate observed patterns from interpretation. It cannot know another person's private feelings from text alone."}, "ru": {"docTitle": "After — анализ отношений", "upHelp": "Ещё нет экспорта переписки?", "upHow": "Как получить файлы →", "fileReady": "Готово к анализу", "prep": "Подготавливаем переписку…", "p1": "Разбираем переписку…", "p2": "Строим хронологию отношений…", "p3": "Ищем паттерны общения…", "p4": "Определяем точки поворота…", "p5": "Собираем отчёт с доказательствами…", "p6": "Готово", "upl": "Загрузите:", "tgt": "Цель:", "upArch": "архив экспорта / JSON", "upVk": "архив данных VK", "kpiDur": "5 лет 8 мес.", "kpiGap": "11 мес.", "qEyebrow": "Вопросы, которые действительно важны", "qTitle": "Так почему эти отношения закончились?", "qText": "After превращает доказательства в ясные и честные ответы на вопросы, от которых трудно отвязаться после расставания.", "q1": "Почему так получилось?", "a1": "Не из-за одной ссоры или одного сообщения: взаимность снижалась, конфликты реже заканчивались примирением, а планы становились расплывчатее — всё вместе и месяцами.", "q2": "Когда человек на самом деле начал отдаляться?", "a2": "After называет две даты: первый повторяющийся сигнал и самый сильный структурный сдвиг. Он показывает, когда изменилось общение, но не тот личный момент, когда изменились чувства.", "q3": "Был ли кто-то другой?", "a3": "Дистанция и более короткие ответы совместимы со многими объяснениями. Без прямых доказательств в переписке After считает это гипотезой, а не фактом.", "q4": "Это была моя вина?", "a4": "Полезный ответ — обычно не «да» и не «нет»: какие циклы поддерживали вы оба и что от вас не зависело. Никаких выдуманных процентов вины.", "q5": "Мог ли я всё спасти?", "a5": "Отчёт отмечает окна: раннее, когда паттерн был новым; окно восстановления, когда сигналы сошлись; и позднее, когда разворот уже маловероятен.", "q6": "Почему мы не расстались раньше?", "a6": "Близость и ухудшение могут сосуществовать месяцами. Хронология показывает этот баланс, а не ищет один «красный флаг».", "q7": "Что мне стоило заметить раньше?", "a7": "Ваш собственный повторяющийся паттерн: что менялось, как долго длилось и работало ли восстановление — чтобы в следующий раз узнать цикл раньше.", "faqEyebrow": "FAQ", "faqTitle": "Вопросы, которые у вас могут возникнуть.", "f1q": "Нужно ли было жить вместе?", "f1a": "Нет. Анализ опирается только на историю общения, поэтому отношения на расстоянии и «по выходным» тоже подходят.", "f2q": "Что, если мы мало переписывались?", "f2a": "Периоды с малым числом сообщений остаются в хронологии, но уверенность выводов ниже, если данных мало.", "f3q": "Можно ли узнать, когда человек перестал любить?", "f3a": "Нет: личные чувства по тексту не прочитать. Анализ показывает, когда изменились наблюдаемые паттерны, и отделяет наблюдения от интерпретации.", "f4q": "Увижу ли я сами сообщения, на которых основан вывод?", "f4a": "Такова цель: каждый важный вывод связан с периодом и выбранными сообщениями-источниками.", "footer": "Этот прототип демонстрирует пользовательский опыт. В рабочей версии экспорт будет обрабатываться на защищённом сервере, выводы будут связаны с исходными сообщениями, а наблюдаемые паттерны — чётко отделены от интерпретаций. По одному тексту нельзя узнать личные чувства другого человека."}, "es": {"docTitle": "After — Análisis de relaciones", "upHelp": "¿Aún no tienes la exportación?", "upHow": "Cómo conseguir mis archivos →", "fileReady": "Listo para analizar", "prep": "Preparando tu conversación…", "p1": "Analizando la conversación…", "p2": "Trazando la cronología de la relación…", "p3": "Detectando patrones de comunicación…", "p4": "Buscando puntos de inflexión…", "p5": "Creando el informe con evidencias…", "p6": "Completado", "upl": "Sube:", "tgt": "Objetivo:", "upArch": "archivo de exportación / JSON", "upVk": "archivo de datos de VK", "kpiDur": "5 años 8 meses", "kpiGap": "11 meses", "qEyebrow": "Las preguntas que de verdad importan", "qTitle": "Entonces… ¿por qué terminó esta relación?", "qText": "After convierte la evidencia en respuestas claras y honestas a las preguntas que cuesta dejar de hacerse tras una ruptura.", "q1": "¿Por qué pasó esto?", "a1": "No fue una pelea ni un mensaje: la reciprocidad bajó, los conflictos se reparaban menos y los planes se volvieron más vagos, todo a la vez y durante meses.", "q2": "¿Cuándo empezó realmente a alejarse?", "a2": "After da dos fechas: la primera señal repetida y el cambio estructural más fuerte. Muestra cuándo cambió la comunicación, no el momento privado en que cambiaron los sentimientos.", "q3": "¿Había otra persona?", "a3": "La distancia y las respuestas más cortas encajan con muchas explicaciones. Sin evidencia directa en el archivo, After lo trata como hipótesis, nunca como hecho.", "q4": "¿Fue culpa mía?", "a4": "La respuesta útil suele no ser sí ni no: qué círculos alimentasteis los dos y qué quedaba fuera de tu control. Sin porcentajes de culpa inventados.", "q5": "¿Podría haberlo salvado?", "a5": "El informe marca ventanas: una temprana, cuando el patrón era nuevo; una de reparación, cuando las señales convergían; y una tardía, con poca posibilidad de revertirlo.", "q6": "¿Por qué no rompimos antes?", "a6": "La conexión y el deterioro pueden convivir durante meses. Una cronología muestra ese equilibrio en lugar de buscar una única señal de alarma.", "q7": "¿Qué debería haber notado antes?", "a7": "Tu propio patrón recurrente: qué cambió, cuánto duró y si la reparación funcionó, para reconocer el círculo antes la próxima vez.", "faqEyebrow": "FAQ", "faqTitle": "Preguntas que quizá tengas.", "f1q": "¿Hace falta haber vivido juntos?", "f1a": "No. El análisis usa solo vuestro historial de comunicación, así que también sirve para relaciones a distancia o de fines de semana.", "f2q": "¿Y si nos escribíamos poco?", "f2a": "Los periodos con pocos mensajes siguen en la cronología, con menor confianza cuando hay poca evidencia.", "f3q": "¿Puede saber cuándo dejó de quererme?", "f3a": "No: los sentimientos privados no se leen en un texto. Muestra cuándo cambiaron los patrones observables y separa la observación de la interpretación.", "f4q": "¿Veré los mensajes reales detrás de una conclusión?", "f4a": "Ese es el objetivo: cada hallazgo importante enlaza con un periodo y con mensajes de origen seleccionados.", "footer": "Este prototipo muestra la experiencia del producto. Una versión real procesaría la exportación en un servidor seguro, mantendría los enlaces a los mensajes de origen y separaría con claridad los patrones observados de la interpretación. Un texto por sí solo no permite conocer los sentimientos privados de otra persona."}, "it": {"docTitle": "After — Analisi della relazione", "upHelp": "Non hai ancora l’esportazione?", "upHow": "Come ottenere i miei file →", "fileReady": "Pronto per l’analisi", "prep": "Preparazione della conversazione…", "p1": "Lettura della conversazione…", "p2": "Costruzione della cronologia della relazione…", "p3": "Rilevamento dei pattern di comunicazione…", "p4": "Ricerca dei punti di svolta…", "p5": "Creazione del report con prove…", "p6": "Completato", "upl": "Carica:", "tgt": "Obiettivo:", "upArch": "archivio di esportazione / JSON", "upVk": "archivio dati di VK", "kpiDur": "5 anni 8 mesi", "kpiGap": "11 mesi", "qEyebrow": "Le domande che contano davvero", "qTitle": "Allora… perché è finita questa relazione?", "qText": "After trasforma le prove in risposte chiare e oneste alle domande che è difficile smettere di farsi dopo una rottura.", "q1": "Perché è successo?", "a1": "Non per un litigio o un messaggio: la reciprocità è calata, i conflitti venivano riparati meno spesso e i piani sono diventati più vaghi, tutto insieme e per mesi.", "q2": "Quando ha iniziato davvero ad allontanarsi?", "a2": "After indica due date: il primo segnale ricorrente e il cambiamento strutturale più forte. Mostra quando è cambiata la comunicazione, non il momento privato in cui sono cambiati i sentimenti.", "q3": "C’era un’altra persona?", "a3": "Distanza e risposte più brevi sono compatibili con molte spiegazioni. Senza prove dirette nell’archivio, After la tratta come un’ipotesi, mai come un fatto.", "q4": "È stata colpa mia?", "a4": "La risposta utile di solito non è sì o no: quali circoli avete alimentato entrambi e cosa era fuori dal tuo controllo. Nessuna percentuale di colpa inventata.", "q5": "Avrei potuto salvare la relazione?", "a5": "Il report indica delle finestre: una iniziale, quando il pattern era nuovo; una di riparazione, quando i segnali convergevano; e una tardiva, con poche possibilità di inversione.", "q6": "Perché non ci siamo lasciati prima?", "a6": "Legame e declino possono convivere per mesi. Una cronologia mostra questo equilibrio invece di cercare un unico campanello d’allarme.", "q7": "Cosa avrei dovuto notare prima?", "a7": "Il tuo pattern ricorrente: cosa è cambiato, quanto è durato e se la riparazione ha funzionato, per riconoscere il circolo prima la prossima volta.", "faqEyebrow": "FAQ", "faqTitle": "Domande che potresti avere.", "f1q": "Dovevamo aver convissuto?", "f1a": "No. L’analisi usa solo la vostra cronologia di comunicazione, quindi funziona anche per relazioni a distanza o di fine settimana.", "f2q": "E se ci scrivevamo poco?", "f2a": "I periodi con pochi messaggi restano nella cronologia, con minore confidenza quando le prove sono scarse.", "f3q": "Può dirmi quando ha smesso di amarmi?", "f3a": "No: i sentimenti privati non si leggono da un testo. Mostra quando sono cambiati i pattern osservabili e separa l’osservazione dall’interpretazione.", "f4q": "Vedrò i messaggi reali dietro una conclusione?", "f4a": "È l’obiettivo: ogni risultato importante rimanda a un periodo e a messaggi di origine selezionati.", "footer": "Questo prototipo mostra l’esperienza del prodotto. Una versione reale elaborerebbe l’esportazione su un backend sicuro, manterrebbe i collegamenti ai messaggi di origine e distinguerebbe chiaramente i pattern osservati dall’interpretazione. Dal solo testo non si possono conoscere i sentimenti privati di un’altra persona."}, "de": {"docTitle": "After — Beziehungsanalyse", "upHelp": "Noch keinen Export?", "upHow": "So bekomme ich meine Dateien →", "fileReady": "Bereit zur Analyse", "prep": "Unterhaltung wird vorbereitet…", "p1": "Unterhaltung wird eingelesen…", "p2": "Beziehungsverlauf wird erstellt…", "p3": "Kommunikationsmuster werden erkannt…", "p4": "Wendepunkte werden gesucht…", "p5": "Bericht mit Belegen wird erstellt…", "p6": "Fertig", "upl": "Hochladen:", "tgt": "Ziel:", "upArch": "Export-Archiv / JSON", "upVk": "VK-Datenarchiv", "kpiDur": "5 Jahre 8 Monate", "kpiGap": "11 Monate", "qEyebrow": "Die Fragen, auf die es wirklich ankommt", "qTitle": "Also … warum ist diese Beziehung zu Ende gegangen?", "qText": "After macht aus Belegen klare, ehrliche Antworten auf die Fragen, die einen nach einer Trennung nicht loslassen.", "q1": "Warum ist das passiert?", "a1": "Nicht wegen eines Streits oder einer Nachricht: Die Gegenseitigkeit sank, Konflikte wurden seltener repariert und Pläne wurden vager – alles zusammen, über Monate.", "q2": "Wann hat sie oder er sich wirklich zurückgezogen?", "a2": "After nennt zwei Zeitpunkte: das erste wiederkehrende Signal und die stärkste strukturelle Veränderung. Es zeigt, wann sich die Kommunikation änderte, nicht den privaten Moment, in dem sich Gefühle änderten.", "q3": "Gab es jemand anderen?", "a3": "Distanz und kürzere Antworten passen zu vielen Erklärungen. Ohne direkten Beleg im Archiv behandelt After das als Hypothese, nie als Tatsache.", "q4": "War es meine Schuld?", "a4": "Die nützliche Antwort ist meist weder Ja noch Nein: Welche Schleifen habt ihr beide genährt und was lag außerhalb deiner Kontrolle? Keine erfundenen Schuldprozente.", "q5": "Hätte ich die Beziehung retten können?", "a5": "Der Bericht markiert Fenster: ein frühes, als das Muster neu war, ein Reparaturfenster, als sich Signale verdichteten, und ein spätes mit geringer Umkehrchance.", "q6": "Warum haben wir uns nicht früher getrennt?", "a6": "Nähe und Verfall können monatelang nebeneinander bestehen. Ein Zeitverlauf zeigt dieses Gleichgewicht, statt nach einem einzigen Warnsignal zu suchen.", "q7": "Was hätte ich früher bemerken sollen?", "a7": "Dein eigenes wiederkehrendes Muster: was sich änderte, wie lange es dauerte und ob Reparatur funktionierte – damit du die Schleife beim nächsten Mal früher erkennst.", "faqEyebrow": "FAQ", "faqTitle": "Fragen, die du vielleicht hast.", "f1q": "Müssen wir zusammengewohnt haben?", "f1a": "Nein. Die Analyse nutzt nur euren Kommunikationsverlauf, daher funktioniert sie auch bei Fernbeziehungen oder Wochenendbeziehungen.", "f2q": "Was, wenn wir kaum geschrieben haben?", "f2a": "Zeiträume mit wenigen Nachrichten bleiben im Verlauf, mit geringerer Sicherheit, wenn die Belege dünn sind.", "f3q": "Kann man erkennen, wann jemand aufgehört hat, mich zu lieben?", "f3a": "Nein: Private Gefühle lassen sich aus Text nicht lesen. Es zeigt, wann sich beobachtbare Muster änderten, und trennt Beobachtung von Interpretation.", "f4q": "Sehe ich die echten Nachrichten hinter einer Schlussfolgerung?", "f4a": "Das ist das Ziel: Jeder wichtige Befund verweist auf einen Zeitraum und ausgewählte Quellnachrichten.", "footer": "Dieser Prototyp zeigt das Produkterlebnis. Eine echte Version würde den Export auf einem sicheren Backend verarbeiten, Verweise auf Quellnachrichten behalten und beobachtete Muster klar von Interpretationen trennen. Aus Text allein lassen sich die privaten Gefühle eines anderen Menschen nicht erkennen."}};
+Object.keys(extraI18n).forEach(function(l){ Object.assign(translations[l], extraI18n[l]); });
+const _originalSetLanguage = setLanguage;
+setLanguage = function(lang){ _originalSetLanguage(lang); if(window.renderAfterDemo) window.renderAfterDemo(lang); if(window.afterLangHook) window.afterLangHook(); };
+
+
+/* LANGUAGE SWITCH */
+
+function setLanguage(lang){
+
+  const t = translations[lang] || translations.en;
+
+  document.documentElement.lang = lang;
+  document.title = t.docTitle || document.title;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+
+    const key = el.dataset.i18n;
+
+    if(t[key]){
+      el.textContent = t[key];
+    }
+
+  });
+
+  document
+    .querySelectorAll('.lang-switch button')
+    .forEach(button => {
+
+      button.classList.toggle(
+        'active',
+        button.dataset.lang === lang
+      );
+
+    });
+
+  saveLang(lang);
+}
+
+
+document
+  .querySelectorAll('.lang-switch button')
+  .forEach(button => {
+
+    button.addEventListener(
+      'click',
+      () => setLanguage(button.dataset.lang)
+    );
+
+  });
+
+
+setLanguage(
+  getLang()
+);
+
+</script>
+
+
+
+<script>
+(function(){
+  const demo = {
+    en:{
+      names:'Daniel & Sofia', dates:'January 2019 → September 2024.', finalName:'Daniel', otherName:'Sofia',
+      tabs:{
+        story:['The story After reconstructs','The relationship did not suddenly collapse in September 2024. The archive suggests a long transition: strong reciprocal communication through 2021, the first sustained imbalance in summer 2022, a clearer structural shift in October 2023, persistent distance in early 2024, and an explicit breakup in September.',['Earliest repeated signal','Jul–Sep 2022'],['Strongest multi-signal shift','Oct 2023']],
+        when:['When did it start?','If the question is “what is the earliest period to investigate?”, After points to July 2022. If the question is “when did the relationship become structurally different?”, the answer is October 2023, when several signals changed together.',['First repeated change','July 2022'],['Structural shift','October 2023']],
+        feelings:['Was she pulling away?','The archive cannot read Sofia’s private feelings. It can show that her communication became less reciprocal, less future-oriented and less repair-focused. That is a strong behavioral finding. Saying “she stopped loving you in October” would go beyond the evidence.',['Observable change','High confidence'],['Private emotional state','Not directly knowable']],
+        other:['Could there be someone else?','The pattern is compatible with many explanations: a new person, burnout, accumulated resentment, changing priorities or a relationship already deteriorating. In this fictional archive there is no direct evidence establishing another person, so a responsible report would not invent a probability.',['Another person','Possible hypothesis'],['Evidence in archive','Not established']],
+        action:['Could Daniel have changed it?','The most useful answer is about intervention windows. In 2022 the pattern was new enough that a direct conversation about initiative and conflict could plausibly have changed the trajectory. In October–November 2023 a relationship-level intervention was still more plausible than in mid-2024. By June–August 2024, the evidence for an easy reversal was weak.',['Best early window','Jul–Sep 2022'],['Late-stage window','Jun–Aug 2024 · weak']]
+      }
+    },
+    ru:{names:'Алексей и София',dates:'Январь 2019 → сентябрь 2024.',finalName:'Алексей',otherName:'София',tabs:{story:['История, которую восстанавливает After','Отношения не рухнули внезапно в сентябре 2024 года. Переписка показывает долгий переход: сильная взаимность до 2021 года, первый устойчивый дисбаланс летом 2022-го, более явный структурный сдвиг в октябре 2023-го, нарастающая дистанция в начале 2024-го и уже прямое расставание в сентябре.',['Первый повторяющийся сигнал','июль–сентябрь 2022'],['Самый сильный сдвиг','октябрь 2023']],when:['Когда это началось?','Если вопрос — какой самый ранний период стоит изучить, After указывает на июль 2022 года. Если вопрос — когда отношения стали структурно другими, ответ — октябрь 2023-го, когда несколько сигналов изменились одновременно.',['Первое повторение','июль 2022'],['Структурный сдвиг','октябрь 2023']],feelings:['Она действительно отдалялась?','Переписка не может прочитать личные чувства Софии. Но она показывает, что её коммуникация стала менее взаимной, менее ориентированной на будущее и менее склонной к восстановлению после конфликтов. Это сильный поведенческий вывод. Говорить «она разлюбила в октябре» было бы выходом за пределы доказательств.',['Наблюдаемое изменение','Высокая уверенность'],['Личные чувства','Напрямую неизвестны']],other:['Мог ли появиться кто-то другой?','Такая динамика совместима с разными объяснениями: новый человек, выгорание, накопившаяся обида, смена приоритетов или уже ухудшавшиеся отношения. В этой истории нет прямых доказательств другого человека, поэтому ответственный отчёт не станет придумывать вероятность.',['Другой человек','Возможная гипотеза'],['Доказательства','Не установлено']],action:['Мог ли Алексей что-то изменить?','Самый полезный ответ связан с окнами для вмешательства. В 2022 году паттерн был достаточно новым, чтобы честный разговор об инициативе и конфликтах мог изменить траекторию. В октябре–ноябре 2023-го вмешательство на уровне самих отношений всё ещё было реалистичным. К июню–августу 2024-го доказательств лёгкого разворота уже мало.',['Лучшее раннее окно','июль–сентябрь 2022'],['Позднее окно','июнь–август 2024 · слабое']]}} ,
+    es:{names:'Carlos y Sofía',dates:'Enero de 2019 → septiembre de 2024.',finalName:'Carlos',otherName:'Sofía',tabs:{story:['La historia que reconstruye After','La relación no terminó de repente en septiembre de 2024. El archivo muestra una transición larga: comunicación muy recíproca hasta 2021, el primer desequilibrio sostenido en el verano de 2022, un cambio estructural más claro en octubre de 2023, distancia persistente a comienzos de 2024 y una ruptura explícita en septiembre.',['Primera señal repetida','jul–sep 2022'],['Cambio estructural más fuerte','octubre 2023']],when:['¿Cuándo empezó?','Si la pregunta es qué periodo conviene investigar primero, After apunta a julio de 2022. Si la pregunta es cuándo la relación se volvió estructuralmente distinta, la respuesta es octubre de 2023, cuando varias señales cambiaron juntas.',['Primer cambio repetido','julio 2022'],['Cambio estructural','octubre 2023']],feelings:['¿Sofía se estaba alejando?','El archivo no puede leer los sentimientos privados de Sofía. Sí puede mostrar que su comunicación se volvió menos recíproca, menos orientada al futuro y menos centrada en reparar conflictos. Eso es un hallazgo conductual sólido. Decir «dejó de quererte en octubre» iría más allá de la evidencia.',['Cambio observable','Alta confianza'],['Estado emocional privado','No se puede saber directamente']],other:['¿Podría haber otra persona?','El patrón es compatible con muchas explicaciones: una nueva persona, agotamiento, resentimiento acumulado, prioridades cambiantes o una relación que ya se estaba deteriorando. En este archivo ficticio no hay evidencia directa de otra persona, así que un informe responsable no inventaría una probabilidad.',['Otra persona','Hipótesis posible'],['Evidencia en el archivo','No demostrado']],action:['¿Carlos podría haberlo cambiado?','La respuesta más útil se centra en las ventanas de intervención. En 2022 el patrón era lo bastante nuevo como para que una conversación directa sobre iniciativa y conflictos pudiera haber cambiado la trayectoria. En octubre–noviembre de 2023 todavía era más plausible intervenir a nivel de la relación. Para junio–agosto de 2024, la evidencia de una reversión sencilla era débil.',['Mejor ventana temprana','jul–sep 2022'],['Etapa tardía','jun–ago 2024 · débil']]}} ,
+    it:{names:'Luca e Giulia',dates:'Gennaio 2019 → settembre 2024.',finalName:'Luca',otherName:'Giulia',tabs:{story:['La storia che ricostruisce After','La relazione non è crollata all’improvviso nel settembre 2024. L’archivio mostra una transizione lunga: comunicazione molto reciproca fino al 2021, il primo squilibrio persistente nell’estate 2022, un cambiamento strutturale più chiaro nell’ottobre 2023, distanza persistente all’inizio del 2024 e una rottura esplicita a settembre.',['Primo segnale ricorrente','lug–set 2022'],['Cambiamento strutturale più forte','ottobre 2023']],when:['Quando è iniziato?','Se la domanda è quale periodo iniziare a studiare, After indica luglio 2022. Se la domanda è quando la relazione è diventata strutturalmente diversa, la risposta è ottobre 2023, quando diversi segnali sono cambiati insieme.',['Primo cambiamento ricorrente','luglio 2022'],['Svolta strutturale','ottobre 2023']],feelings:['Giulia si stava allontanando?','L’archivio non può leggere i sentimenti privati di Giulia. Può però mostrare che la sua comunicazione è diventata meno reciproca, meno orientata al futuro e meno focalizzata sulla riparazione dei conflitti. È un dato comportamentale forte. Dire «ha smesso di amarti a ottobre» andrebbe oltre le prove.',['Cambiamento osservabile','Alta confidenza'],['Stato emotivo privato','Non direttamente conoscibile']],other:['Potrebbe esserci stata un’altra persona?','Il modello è compatibile con molte spiegazioni: una nuova persona, esaurimento, risentimento accumulato, priorità cambiate o una relazione già in deterioramento. In questo archivio fittizio non c’è una prova diretta di un’altra persona, quindi un report responsabile non inventerebbe una probabilità.',['Altra persona','Ipotesi possibile'],['Prove nell’archivio','Non dimostrato']],action:['Luca avrebbe potuto cambiare le cose?','La risposta più utile riguarda le finestre di intervento. Nel 2022 il pattern era abbastanza nuovo perché una conversazione diretta su iniziativa e conflitti potesse plausibilmente cambiare la traiettoria. Tra ottobre e novembre 2023 un intervento sulla relazione era ancora plausibile. A giugno–agosto 2024, le prove di una facile inversione erano deboli.',['Migliore finestra iniziale','lug–set 2022'],['Fase avanzata','giu–ago 2024 · debole']]}} ,
+    de:{names:'Lukas & Anna',dates:'Januar 2019 → September 2024.',finalName:'Lukas',otherName:'Anna',tabs:{story:['Die Geschichte, die After rekonstruiert','Die Beziehung ist im September 2024 nicht plötzlich zerbrochen. Das Archiv zeigt einen langen Übergang: starke gegenseitige Kommunikation bis 2021, das erste anhaltende Ungleichgewicht im Sommer 2022, eine deutlichere strukturelle Veränderung im Oktober 2023, anhaltende Distanz Anfang 2024 und schließlich die klare Trennung im September.',['Erstes wiederkehrendes Signal','Jul–Sep 2022'],['Stärkste strukturelle Veränderung','Oktober 2023']],when:['Wann hat es angefangen?','Wenn es darum geht, welchen Zeitraum man zuerst untersuchen sollte, zeigt After auf Juli 2022. Wenn die Frage lautet, wann die Beziehung strukturell anders wurde, ist die Antwort Oktober 2023, als mehrere Signale gleichzeitig kippten.',['Erste wiederkehrende Veränderung','Juli 2022'],['Strukturelle Veränderung','Oktober 2023']],feelings:['Hat Anna sich zurückgezogen?','Das Archiv kann Annas private Gefühle nicht lesen. Es zeigt jedoch, dass ihre Kommunikation weniger gegenseitig, weniger zukunftsorientiert und weniger auf Konfliktreparatur ausgerichtet wurde. Das ist ein starker Verhaltensbefund. Zu sagen «sie hat im Oktober aufgehört, dich zu lieben» würde über die Belege hinausgehen.',['Beobachtbare Veränderung','Hohe Sicherheit'],['Privater Gefühlszustand','Nicht direkt erkennbar']],other:['Könnte es jemand anderen gegeben haben?','Das Muster ist mit mehreren Erklärungen vereinbar: eine neue Person, Erschöpfung, aufgestauter Frust, veränderte Prioritäten oder eine Beziehung, die bereits zerfiel. In diesem fiktiven Archiv gibt es keinen direkten Beleg für eine andere Person. Ein seriöser Bericht würde deshalb keine Wahrscheinlichkeit erfinden.',['Andere Person','Mögliche Hypothese'],['Beleg im Archiv','Nicht belegt']],action:['Hätte Lukas etwas ändern können?','Die sinnvollste Antwort betrifft die Interventionsfenster. 2022 war das Muster noch neu genug, dass ein direktes Gespräch über Initiative und Konflikte den Verlauf plausibel hätte verändern können. Im Oktober–November 2023 war eine Intervention auf Beziehungsebene noch realistischer als Mitte 2024. Im Juni–August 2024 war die Evidenz für eine einfache Umkehr schwach.',['Bestes frühes Fenster','Jul–Sep 2022'],['Späte Phase','Jun–Aug 2024 · schwach']]}}
+  };
+  const labels={en:{finding:'Finding',context:'Context',meaning:'What After concludes:',why:'Why does this matter?',hide:'Hide interpretation',evidence:'Evidence-linked interpretation',signal:'FIRST SIGNAL',plans:'FUTURE PLANS',conflict:'CONFLICT',turn:'TURNING POINT',distance:'DISTANCE',repair:'REPAIR BREAKS',breakup:'BREAKUP',timelineInfo:'Illustrative relationship-signal index',click:'Click another period to inspect the change.',windowEarly:'Early intervention window.',windowStrong:'Strongest repair window.',windowLate:'Low reversal window.'},ru:{finding:'Вывод',context:'Контекст',meaning:'Что заключает After:',why:'Почему это важно?',hide:'Скрыть интерпретацию',evidence:'Интерпретация на основе доказательств',signal:'ПЕРВЫЙ СИГНАЛ',plans:'ПЛАНЫ НА БУДУЩЕЕ',conflict:'КОНФЛИКТ',turn:'ПОВОРОТНЫЙ МОМЕНТ',distance:'ДИСТАНЦИЯ',repair:'КОНЕЦ ВОССТАНОВЛЕНИЯ',breakup:'РАССТАВАНИЕ',timelineInfo:'Иллюстративный индекс сигнала отношений',click:'Нажмите на другой период, чтобы посмотреть изменение.',windowEarly:'Окно раннего вмешательства.',windowStrong:'Самое сильное окно для восстановления.',windowLate:'Позднее окно: развернуть ситуацию уже сложно.'},es:{finding:'Hallazgo',context:'Contexto',meaning:'Conclusión de After:',why:'¿Por qué importa?',hide:'Ocultar interpretación',evidence:'Interpretación vinculada a la evidencia',signal:'PRIMERA SEÑAL',plans:'PLANES DE FUTURO',conflict:'CONFLICTO',turn:'PUNTO DE INFLEXIÓN',distance:'DISTANCIA',repair:'SE ROMPE LA REPARACIÓN',breakup:'RUPTURA',timelineInfo:'Índice ilustrativo de la señal de la relación',click:'Haz clic en otro periodo para ver el cambio.',windowEarly:'Ventana de intervención temprana.',windowStrong:'Ventana más fuerte para reparar.',windowLate:'Ventana tardía: poca posibilidad de revertirlo.'},it:{finding:'Risultato',context:'Contesto',meaning:'Conclusione di After:',why:'Perché è importante?',hide:'Nascondi interpretazione',evidence:'Interpretazione legata alle prove',signal:'PRIMO SEGNALE',plans:'PIANI FUTURI',conflict:'CONFLITTO',turn:'PUNTO DI SVOLTA',distance:'DISTANZA',repair:'LA RIPARAZIONE SI ROMPE',breakup:'ROTTURA',timelineInfo:'Indice illustrativo del segnale della relazione',click:'Clicca su un altro periodo per vedere il cambiamento.',windowEarly:'Finestra di intervento iniziale.',windowStrong:'Finestra più forte per intervenire.',windowLate:'Finestra tardiva: poche possibilità di inversione.'},de:{finding:'Befund',context:'Kontext',meaning:'Was After daraus schließt:',why:'Warum ist das wichtig?',hide:'Interpretation ausblenden',evidence:'Evidenzbasierte Interpretation',signal:'ERSTES SIGNAL',plans:'ZUKUNFTSPLÄNE',conflict:'KONFLIKT',turn:'WENDEPUNKT',distance:'DISTANZ',repair:'REPARATUR BRICHT AB',breakup:'TRENNUNG',timelineInfo:'Illustrierter Beziehungs-Signalindex',click:'Klicke auf einen anderen Zeitraum, um die Veränderung zu sehen.',windowEarly:'Frühes Interventionsfenster.',windowStrong:'Stärkstes Fenster für Reparatur.',windowLate:'Spätes Fenster: geringe Chance auf Umkehr.'}};
+  const evidence={
+    en:[['14 Jul 2022','FIRST SIGNAL','“I feel like lately I\'m the one who keeps asking when we\'re going to see each other.”','Before this period, initiation was broadly reciprocal. Similar complaints appear again in August and September.','The first repeated imbalance in initiative. One message does not prove anything; recurrence makes it meaningful.'],['18 Aug 2022','FUTURE PLANS','“I don\'t know, let\'s see. We\'ll figure it out.”','Earlier in the archive, plans are unusually concrete: dates, trips, weekends and shared commitments.','One vague answer means little. Repeated vagueness matters because it replaces a previously stable planning pattern.'],['7 Oct 2023','CONFLICT','“I\'m tired. Can we not do this tonight?”','Earlier conflicts usually return to a resolution. Later conflicts increasingly remain open.','After identifies a change in the repair cycle: unresolved conversations begin accumulating.'],['21 Oct 2023','TURNING POINT','“I don\'t want another conversation where we end up exactly where we started.”','This follows several arguments about the same issue, which appears repeatedly across months.','A strong turning-point candidate because the message explicitly describes a recurring loop.'],['11 Feb 2024','DISTANCE','“You don\'t have to come if it\'s complicated.”','Shared plans had already declined. Similar distancing language appears in later planning exchanges.','Meaningful because the language change appears together with lower initiative and fewer joint plans.'],['28 Apr 2024','FUTURE PLANS','“Maybe later this year. We\'ll see.”','Earlier conversations contain concrete plans months ahead.','The signal is the loss of concreteness compared with the same couple\'s earlier baseline.'],['19 Jun 2024','REPAIR BREAKS','“I don\'t want to talk about it anymore.”','This follows another recurring conflict. The old pattern of returning and resolving is now largely absent.','The clearest late-stage change in the repair mechanism. It does not prove inevitability.'],['3 Sep 2024','BREAKUP','“I think we both know this isn\'t working anymore.”','Months of declining reciprocity, weaker repair and reduced future planning precede this message.','This establishes the breakup state. It should not be used to invent an exact earlier date for a private feeling.']],
+    ru:[['14 июл. 2022','FIRST SIGNAL','«Мне кажется, в последнее время именно я постоянно спрашиваю, когда мы увидимся».','До этого периода инициатива в основном была взаимной. Похожие жалобы снова появляются в августе и сентябре.','Первый повторяющийся дисбаланс инициативы. Одно сообщение ничего не доказывает; повторяемость делает сигнал значимым.'],['18 авг. 2022','FUTURE PLANS','«Не знаю, посмотрим. Разберёмся».','Раньше планы были гораздо конкретнее: даты, поездки, выходные и общие обязательства.','Один расплывчатый ответ мало что значит. Повторяющаяся расплывчатость важна, потому что заменяет прежний устойчивый паттерн планирования.'],['7 окт. 2023','CONFLICT','«Я устала. Давай не будем сегодня об этом».','Раньше конфликты обычно возвращались к обсуждению и разрешению. Позже всё больше разговоров оставались незавершёнными.','After видит изменение цикла восстановления: нерешённые разговоры начинают накапливаться.'],['21 окт. 2023','TURNING POINT','«Я не хочу ещё одного разговора, после которого мы снова окажемся там же».','Перед этим было несколько споров об одной и той же проблеме, которая повторяется месяцами.','Сильный кандидат на точку поворота: сообщение прямо описывает повторяющийся цикл.'],['11 февр. 2024','DISTANCE','«Тебе не обязательно приезжать, если это сложно».','Совместных планов уже стало меньше. Похожий язык дистанцирования появляется и позже.','Сигнал важен потому, что изменение формулировок совпадает со снижением инициативы и числа совместных планов.'],['28 апр. 2024','FUTURE PLANS','«Может быть, позже в этом году. Посмотрим».','Раньше в переписке встречаются конкретные планы на месяцы вперёд.','Сигнал — потеря конкретики по сравнению с прежней нормой этой пары.'],['19 июн. 2024','REPAIR BREAKS','«Я больше не хочу об этом говорить».','Это происходит после очередного повторяющегося конфликта. Прежний паттерн возвращения к разговору почти исчез.','Самое заметное позднее изменение механизма восстановления. Оно всё ещё не доказывает неизбежность расставания.'],['3 сент. 2024','BREAKUP','«Думаю, мы оба понимаем, что это больше не работает».','Этой фразе предшествуют месяцы снижения взаимности, слабого восстановления и уменьшения планов на будущее.','Это подтверждает состояние расставания, но не позволяет придумать точную более раннюю дату изменения личных чувств.']],
+    es:[['14 jul 2022','FIRST SIGNAL','«Siento que últimamente soy yo quien sigue preguntando cuándo vamos a vernos».','Antes de este periodo, la iniciativa era bastante recíproca. Quejas similares vuelven a aparecer en agosto y septiembre.','Es el primer desequilibrio repetido en la iniciativa. Un mensaje no demuestra nada; la repetición lo vuelve significativo.'],['18 ago 2022','FUTURE PLANS','«No sé, ya veremos. Lo resolveremos».','Antes, los planes eran mucho más concretos: fechas, viajes, fines de semana y compromisos compartidos.','Una respuesta vaga significa poco. La vaguedad repetida importa porque sustituye un patrón de planificación estable.'],['7 oct 2023','CONFLICT','«Estoy cansada. ¿Podemos no hablar de esto esta noche?»','Antes, los conflictos solían volver a una resolución. Más adelante, cada vez más conversaciones quedan abiertas.','After identifica un cambio en el ciclo de reparación: los temas sin resolver empiezan a acumularse.'],['21 oct 2023','TURNING POINT','«No quiero otra conversación en la que acabemos exactamente donde empezamos».','Esto ocurre después de varias discusiones sobre el mismo problema, repetido durante meses.','Es un fuerte candidato a punto de inflexión porque describe explícitamente un ciclo repetitivo.'],['11 feb 2024','DISTANCE','«No tienes que venir si es complicado».','Los planes compartidos ya habían disminuido. Aparece un lenguaje de distancia similar en conversaciones posteriores.','Importa porque el cambio de lenguaje aparece junto con menor iniciativa y menos planes conjuntos.'],['28 abr 2024','FUTURE PLANS','«Quizá más adelante este año. Ya veremos».','Antes había planes concretos con meses de antelación.','La señal es la pérdida de concreción frente al patrón anterior de la misma pareja.'],['19 jun 2024','REPAIR BREAKS','«Ya no quiero hablar de esto».','Ocurre después de otro conflicto recurrente. El antiguo patrón de volver y resolver prácticamente ha desaparecido.','Es el cambio tardío más claro en el mecanismo de reparación. No demuestra que la ruptura fuera inevitable.'],['3 sep 2024','BREAKUP','«Creo que los dos sabemos que esto ya no funciona».','Antes hubo meses de menor reciprocidad, reparación más débil y menos planificación futura.','Establece el estado de ruptura. No debe utilizarse para inventar una fecha exacta anterior de cambio emocional.']],
+    it:[['14 lug 2022','FIRST SIGNAL','«Mi sembra che ultimamente sia sempre io a chiedere quando ci vediamo».','Prima di questo periodo, l’iniziativa era abbastanza reciproca. Lamentele simili ricompaiono ad agosto e settembre.','È il primo squilibrio ricorrente nell’iniziativa. Un messaggio non prova nulla; la ripetizione lo rende significativo.'],['18 ago 2022','FUTURE PLANS','«Non lo so, vediamo. Ci penseremo».','In precedenza i piani erano molto più concreti: date, viaggi, weekend e impegni condivisi.','Una risposta vaga conta poco. La vaghezza ripetuta è importante perché sostituisce un precedente schema stabile.'],['7 ott 2023','CONFLICT','«Sono stanca. Possiamo non parlarne stasera?»','Prima i conflitti tornavano di solito verso una soluzione. Più avanti, sempre più conversazioni restano aperte.','After individua un cambiamento nel ciclo di riparazione: le conversazioni irrisolte iniziano ad accumularsi.'],['21 ott 2023','TURNING POINT','«Non voglio un’altra conversazione in cui finiamo esattamente da dove siamo partiti».','Segue diverse discussioni sullo stesso problema, che si ripete per mesi.','Forte candidato a punto di svolta perché il messaggio descrive esplicitamente un ciclo ricorrente.'],['11 feb 2024','DISTANCE','«Non devi venire se è complicato».','I piani condivisi erano già diminuiti. Un linguaggio simile di distanza ricompare in seguito.','È significativo perché il cambio di linguaggio coincide con minore iniziativa e meno piani condivisi.'],['28 apr 2024','FUTURE PLANS','«Magari più avanti quest’anno. Vedremo».','In precedenza c’erano piani concreti con mesi di anticipo.','Il segnale è la perdita di concretezza rispetto al precedente modello della stessa coppia.'],['19 giu 2024','REPAIR BREAKS','«Non voglio più parlarne».','Succede dopo un altro conflitto ricorrente. Il vecchio schema di tornare e risolvere è ormai quasi assente.','È il cambiamento tardivo più netto nel meccanismo di riparazione. Non dimostra che la rottura fosse inevitabile.'],['3 set 2024','BREAKUP','«Penso che entrambi sappiamo che non funziona più».','Prima ci sono mesi di minore reciprocità, riparazione più debole e meno piani per il futuro.','Stabilisce lo stato di rottura. Non va usato per inventare una data precisa precedente dei sentimenti privati.']],
+    de:[['14. Juli 2022','FIRST SIGNAL','„Ich habe das Gefühl, dass ich in letzter Zeit immer frage, wann wir uns sehen.“','Vor diesem Zeitraum war die Initiative weitgehend gegenseitig. Ähnliche Beschwerden tauchen im August und September erneut auf.','Das erste wiederkehrende Ungleichgewicht bei der Initiative. Eine Nachricht beweist nichts; die Wiederholung macht sie relevant.'],['18. Aug. 2022','FUTURE PLANS','„Ich weiß nicht, mal sehen. Wir kriegen das schon hin.“','Früher waren Pläne ungewöhnlich konkret: Termine, Reisen, Wochenenden und gemeinsame Verpflichtungen.','Eine vage Antwort bedeutet wenig. Wiederholte Unklarheit ist relevant, weil sie ein zuvor stabiles Planungsschema ersetzt.'],['7. Okt. 2023','CONFLICT','„Ich bin müde. Können wir heute Abend nicht darüber reden?“','Frühere Konflikte führten meist wieder zu einer Lösung. Später bleiben immer mehr Gespräche offen.','After erkennt eine Veränderung im Reparaturzyklus: ungelöste Gespräche sammeln sich an.'],['21. Okt. 2023','TURNING POINT','„Ich will kein weiteres Gespräch, bei dem wir am Ende genau dort stehen, wo wir angefangen haben.“','Dem gingen mehrere Streitgespräche über dasselbe Thema voraus, das sich über Monate wiederholt.','Ein starker Wendepunkt-Kandidat, weil die Nachricht ausdrücklich eine wiederkehrende Schleife beschreibt.'],['11. Feb. 2024','DISTANCE','„Du musst nicht kommen, wenn es kompliziert ist.“','Gemeinsame Pläne waren bereits zurückgegangen. Ähnliche Distanzsprache taucht später erneut auf.','Relevant, weil die veränderte Sprache zusammen mit weniger Initiative und weniger gemeinsamen Plänen erscheint.'],['28. Apr. 2024','FUTURE PLANS','„Vielleicht später in diesem Jahr. Mal sehen.“','Früher gab es konkrete Pläne mit Monaten Vorlauf.','Das Signal ist der Verlust an Konkretheit gegenüber dem früheren Muster des Paares.'],['19. Juni 2024','REPAIR BREAKS','„Ich will nicht mehr darüber reden.“','Dies folgt auf einen weiteren wiederkehrenden Konflikt. Das frühere Muster, zurückzukehren und zu klären, ist nun weitgehend verschwunden.','Die deutlichste späte Veränderung im Reparaturmechanismus. Sie beweist nicht, dass die Trennung unvermeidbar war.'],['3. Sept. 2024','BREAKUP','„Ich glaube, wir wissen beide, dass das nicht mehr funktioniert.“','Dem gingen Monate mit weniger Gegenseitigkeit, schwächerer Konfliktreparatur und weniger Zukunftsplanung voraus.','Dies belegt den Trennungszustand. Daraus sollte kein exakter früherer Zeitpunkt privater Gefühle erfunden werden.']]
+  };
+  const windows={en:[['Jul–Sep 2022','Pattern is new','Early intervention window. The change is visible but not dominant. Strong reciprocity, affection and concrete plans are still present. A direct conversation about the recurring dynamic could plausibly have changed the trajectory.'],['Oct–Nov 2023','Signals converge','Strongest repair window. Multiple patterns move together. This is where the report would recommend addressing the relationship itself, not just winning the individual argument.'],['Jun–Aug 2024','Pattern entrenched','Low reversal window. The same pattern has persisted for months. The report should not promise that one perfect conversation could have saved it.']],ru:[['июль–сентябрь 2022','Паттерн только формируется','Раннее окно вмешательства. Изменение уже видно, но оно ещё не доминирует. Взаимность, тепло и конкретные планы всё ещё сильны. Честный разговор о повторяющейся динамике мог изменить траекторию.'],['октябрь–ноябрь 2023','Сигналы сходятся','Самое сильное окно для восстановления. Несколько паттернов меняются одновременно. Здесь стоит говорить уже об отношениях в целом, а не только пытаться выиграть отдельный спор.'],['июнь–август 2024','Паттерн закрепился','Позднее окно с низкой вероятностью разворота. Та же динамика сохраняется месяцами. Отчёт не должен обещать, что один идеальный разговор мог всё спасти.']],es:[['jul–sep 2022','El patrón es nuevo','Ventana de intervención temprana. El cambio es visible pero todavía no domina. La reciprocidad, el afecto y los planes concretos siguen presentes.'],['oct–nov 2023','Las señales convergen','Ventana más fuerte para reparar. Varios patrones cambian a la vez. Aquí conviene abordar la relación, no solo ganar una discusión.'],['jun–ago 2024','El patrón está arraigado','Ventana tardía con poca posibilidad de reversión. El mismo patrón lleva meses presente. El informe no debe prometer que una conversación perfecta lo habría salvado.']],it:[['lug–set 2022','Il pattern è nuovo','Finestra di intervento iniziale. Il cambiamento è visibile ma non dominante. Reciprocità, affetto e piani concreti sono ancora presenti.'],['ott–nov 2023','I segnali convergono','Finestra più forte per intervenire. Più pattern cambiano insieme. Qui il report consiglierebbe di affrontare la relazione, non solo la singola discussione.'],['giu–ago 2024','Il pattern è radicato','Finestra tardiva con basse possibilità di inversione. Lo stesso schema dura da mesi. Il report non dovrebbe promettere che una conversazione perfetta avrebbe salvato la relazione.']],de:[['Jul–Sep 2022','Das Muster ist neu','Frühes Interventionsfenster. Die Veränderung ist sichtbar, aber noch nicht dominant. Gegenseitigkeit, Nähe und konkrete Pläne sind noch vorhanden.'],['Okt–Nov 2023','Die Signale verdichten sich','Stärkstes Reparaturfenster. Mehrere Muster verändern sich gleichzeitig. Hier sollte man die Beziehung als Ganzes ansprechen, nicht nur den einzelnen Streit gewinnen.'],['Jun–Aug 2024','Das Muster ist verfestigt','Spätes Fenster mit geringer Umkehrchance. Dasselbe Muster besteht seit Monaten. Der Bericht sollte nicht versprechen, dass ein perfektes Gespräch alles gerettet hätte.']]};
+  const periods={en:[['2019','Beginning',82],['2020','Falling in love',91],['2021','Stable',86],['H1 22','Stable',81],['H2 22','First imbalance',70],['H1 23','Uneven',67],['Oct 23','Structural shift',53],['Nov 23','Repair weakens',49],['Feb 24','Distance',43],['Apr 24','Plans fade',39],['Jun 24','Repair loop breaks',31],['Aug 24','Low reciprocity',27],['Sep 24','Breakup',18]],ru:[['2019','Начало',82],['2020','Влюблённость',91],['2021','Стабильно',86],['1 пол. 22','Стабильно',81],['2 пол. 22','Первый дисбаланс',70],['1 пол. 23','Неровно',67],['окт. 23','Структурный сдвиг',53],['нояб. 23','Восстановление слабеет',49],['февр. 24','Дистанция',43],['апр. 24','Планы угасают',39],['июнь 24','Цикл восстановления ломается',31],['авг. 24','Низкая взаимность',27],['сент. 24','Расставание',18]],es:[['2019','Inicio',82],['2020','Enamoramiento',91],['2021','Estable',86],['1S 22','Estable',81],['2S 22','Primer desequilibrio',70],['1S 23','Irregular',67],['oct. 23','Cambio estructural',53],['nov. 23','Reparación más débil',49],['feb. 24','Distancia',43],['abr. 24','Los planes se diluyen',39],['jun. 24','Se rompe la reparación',31],['ago. 24','Baja reciprocidad',27],['sep. 24','Ruptura',18]],it:[['2019','Inizio',82],['2020','Innamoramento',91],['2021','Stabile',86],['1º sem. 22','Stabile',81],['2º sem. 22','Primo squilibrio',70],['1º sem. 23','Discontinuo',67],['ott. 23','Svolta strutturale',53],['nov. 23','Riparazione più debole',49],['feb. 24','Distanza',43],['apr. 24','I piani sfumano',39],['giu. 24','Il ciclo di riparazione si rompe',31],['ago. 24','Bassa reciprocità',27],['set. 24','Rottura',18]],de:[['2019','Beginn',82],['2020','Verliebt',91],['2021','Stabil',86],['H1 22','Stabil',81],['H2 22','Erstes Ungleichgewicht',70],['H1 23','Uneinheitlich',67],['Okt. 23','Strukturelle Veränderung',53],['Nov. 23','Reparatur wird schwächer',49],['Feb. 24','Distanz',43],['Apr. 24','Pläne verblassen',39],['Jun. 24','Reparaturschleife bricht',31],['Aug. 24','Wenig Gegenseitigkeit',27],['Sep. 24','Trennung',18]]};
+  const final={en:[['The breakup was not one event.','The final sentence came in September 2024, but the archive shows a gradual change beginning much earlier.'],['July 2022 was the first repeated signal, not proof of the end.','Connection was still strong enough that an intervention was plausible.'],['October 2023 is the most useful turning point.','Several independent communication patterns changed together.'],['There is no honest evidence here for “someone else”.','The pattern is compatible with that hypothesis, but does not establish it.'],['The useful question becomes what to recognize earlier next time.','The archive becomes a source of learning rather than another reason to reread 58,000 messages.']],ru:[['Расставание не было одним событием.','Финальная фраза появилась в сентябре 2024-го, но переписка показывает постепенное изменение, начавшееся гораздо раньше.'],['Июль 2022-го — первый повторяющийся сигнал, но не доказательство конца.','Связь всё ещё была достаточно сильной, чтобы вмешательство имело смысл.'],['Октябрь 2023-го — самая полезная точка поворота.','Несколько независимых паттернов коммуникации изменились одновременно.'],['Здесь нет честных доказательств «другого человека».','Такая гипотеза совместима с паттерном, но переписка её не подтверждает.'],['Полезный вопрос — что распознать раньше в следующий раз.','Архив становится источником понимания, а не поводом перечитывать 58 тысяч сообщений.']],es:[['La ruptura no fue un solo acontecimiento.','La frase final llegó en septiembre de 2024, pero el archivo muestra un cambio gradual mucho antes.'],['Julio de 2022 fue la primera señal repetida, no una prueba del final.','La conexión seguía siendo lo bastante fuerte como para que una intervención fuera plausible.'],['Octubre de 2023 es el punto de inflexión más útil.','Varios patrones independientes de comunicación cambiaron juntos.'],['No hay evidencia honesta aquí de «otra persona».','El patrón es compatible con esa hipótesis, pero no la demuestra.'],['La pregunta útil pasa a ser qué reconocer antes la próxima vez.','El archivo se convierte en una fuente de aprendizaje, no en otra razón para releer 58.000 mensajes.']],it:[['La rottura non è stata un singolo evento.','La frase finale arriva a settembre 2024, ma l’archivio mostra un cambiamento graduale iniziato molto prima.'],['Luglio 2022 è stato il primo segnale ricorrente, non la prova della fine.','Il legame era ancora abbastanza forte da rendere plausibile un intervento.'],['Ottobre 2023 è il punto di svolta più utile.','Diversi pattern indipendenti della comunicazione cambiano insieme.'],['Qui non ci sono prove oneste di «un’altra persona».','Il pattern è compatibile con questa ipotesi, ma non la dimostra.'],['La domanda utile diventa cosa riconoscere prima la prossima volta.','L’archivio diventa una fonte di apprendimento, non un altro motivo per rileggere 58.000 messaggi.']],de:[['Die Trennung war kein einzelnes Ereignis.','Der letzte Satz kam im September 2024, aber das Archiv zeigt eine allmähliche Veränderung, die viel früher begann.'],['Juli 2022 war das erste wiederkehrende Signal, nicht der Beweis für das Ende.','Die Verbindung war noch stark genug, dass eine Intervention plausibel war.'],['Oktober 2023 ist der nützlichste Wendepunkt.','Mehrere unabhängige Kommunikationsmuster veränderten sich gleichzeitig.'],['Es gibt hier keinen belastbaren Beleg für «jemand anderen».','Das Muster ist mit dieser Hypothese vereinbar, beweist sie aber nicht.'],['Die nützlichere Frage lautet, was man beim nächsten Mal früher erkennen kann.','Das Archiv wird zu einer Lernquelle statt zu einem weiteren Grund, 58.000 Nachrichten erneut zu lesen.']]};
+  const meta={en:{findingA:'Finding A',findingB:'Finding B',context:'Context:',meaning:'What After concludes:',evidence:'Evidence-linked interpretation',why:'Why does this matter?',hide:'Hide interpretation',timeline:'Illustrative relationship-signal index',click:'Click another period to inspect the change.'},ru:{findingA:'Вывод A',findingB:'Вывод B',context:'Контекст:',meaning:'Что заключает After:',evidence:'Интерпретация на основе доказательств',why:'Почему это важно?',hide:'Скрыть интерпретацию',timeline:'Иллюстративный индекс сигнала отношений',click:'Нажмите на другой период, чтобы посмотреть изменение.'},es:{findingA:'Hallazgo A',findingB:'Hallazgo B',context:'Contexto:',meaning:'Conclusión de After:',evidence:'Interpretación vinculada a la evidencia',why:'¿Por qué importa?',hide:'Ocultar interpretación',timeline:'Índice ilustrativo de la señal de la relación',click:'Haz clic en otro periodo para ver el cambio.'},it:{findingA:'Risultato A',findingB:'Risultato B',context:'Contesto:',meaning:'Conclusione di After:',evidence:'Interpretazione legata alle prove',why:'Perché è importante?',hide:'Nascondi interpretazione',timeline:'Indice illustrativo del segnale della relazione',click:'Clicca su un altro periodo per vedere il cambiamento.'},de:{findingA:'Befund A',findingB:'Befund B',context:'Kontext:',meaning:'Was After daraus schließt:',evidence:'Evidenzbasierte Interpretation',why:'Warum ist das wichtig?',hide:'Interpretation ausblenden',timeline:'Illustrierter Beziehungs-Signalindex',click:'Klicke auf einen anderen Zeitraum, um die Veränderung zu sehen.'}};
+  const tagMap={'FIRST SIGNAL':'signal','FUTURE PLANS':'plans','CONFLICT':'conflict','TURNING POINT':'turn','DISTANCE':'distance','REPAIR BREAKS':'repair','BREAKUP':'breakup'};
+  function lang(){return getLang()}
+  function renderTab(key){const l=lang(),d=demo[l]||demo.en,q=d.tabs[key],m=meta[l]||meta.en;document.querySelectorAll('[data-case-tab]').forEach(x=>x.classList.toggle('active',x.dataset.caseTab===key));document.getElementById('caseOutput').innerHTML='<h4>'+q[0]+'</h4><div>'+q[1]+'</div><div class="case-compare"><div><span class="case-label">'+m.findingA+'</span><b>'+q[2][0]+'</b>'+q[2][1]+'</div><div><span class="case-label">'+m.findingB+'</span><b>'+q[3][0]+'</b>'+q[3][1]+'</div></div>'}
+  function timelineLabel(raw,l){
+    const v=String(raw||'').trim();
+    if(/^\d{4}$/.test(v)) return v;
+    const m=v.match(/^(.*?)(?:\s+)(\d{2,4})$/);
+    if(!m) return v;
+    let head=m[1].trim(), yy=m[2];
+    const year=yy.length===2?'20'+yy:yy;
+    return '<span>'+head+'</span><span class="yr">'+year+'</span>';
+  }
+  function timelineFull(raw,l){
+    const v=String(raw||'').trim();
+    const monthMaps={
+      ru:{'янв.':'Январь','февр.':'Февраль','мар.':'Март','апр.':'Апрель','май':'Май','июн.':'Июнь','июль':'Июль','авг.':'Август','сент.':'Сентябрь','окт.':'Октябрь','нояб.':'Ноябрь','дек.':'Декабрь'},
+      en:{Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',Jul:'July',Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December'},
+      es:{'ene.':'Enero','feb.':'Febrero','mar.':'Marzo','abr.':'Abril','may.':'Mayo','jun.':'Junio','jul.':'Julio','ago.':'Agosto','sep.':'Septiembre','oct.':'Octubre','nov.':'Noviembre','dic.':'Diciembre'},
+      it:{'gen.':'Gennaio','feb.':'Febbraio','mar.':'Marzo','apr.':'Aprile','mag.':'Maggio','giu.':'Giugno','lug.':'Luglio','ago.':'Agosto','set.':'Settembre','ott.':'Ottobre','nov.':'Novembre','dic.':'Dicembre'},
+      de:{'Jan.': 'Januar','Feb.': 'Februar','Mär.': 'März','Apr.': 'April',Mai:'Mai','Jun.': 'Juni','Jul.': 'Juli','Aug.': 'August','Sep.': 'September','Okt.': 'Oktober','Nov.': 'November','Dez.': 'Dezember'}
+    };
+    const map=monthMaps[l]||monthMaps.en;
+    const m=v.match(/^(.*?)(?:\s+)(\d{2,4})$/);
+    if(!m) return v;
+    const head=m[1].trim(), yy=m[2], year=yy.length===2?'20'+yy:yy;
+    if(/^\d/.test(head)) return v;
+    const full=map[head]||head;
+    return full+' '+year;
+  }
+  function renderChart(i){const l=lang(),ps=periods[l]||periods.en,m=meta[l]||meta.en;document.getElementById('caseChart').innerHTML=ps.map((p,n)=>'<div class="case-bar '+(n===i?'active':'')+'" style="height:'+Math.max(10,Math.min(100,Number(p[2])||0))+'%;" data-i="'+n+'"><span>'+timelineLabel(p[0],l)+'</span></div>').join('');const p=ps[i];document.getElementById('caseChartInfo').innerHTML='<b>'+timelineFull(p[0],l)+' · '+p[1]+'</b><br>'+m.timeline+': <b>'+p[2]+'/100</b>. '+m.click;document.querySelectorAll('.case-bar').forEach(x=>x.addEventListener('click',()=>renderChart(Number(x.dataset.i))))}
+  function renderEvidence(){const l=lang(),es=evidence[l]||evidence.en,m=meta[l]||meta.en;document.getElementById('caseEvidence').innerHTML=es.map((e,i)=>'<article class="case-quote" data-q="'+i+'"><div class="case-quote-head"><span class="case-date">'+e[0]+'</span><span class="case-tag">'+((labels[l]||labels.en)[tagMap[e[1]]]||e[1])+'</span></div><div class="case-quote-body"><div class="case-quote-text">'+e[2]+'</div><div class="case-context"><b>'+m.context+'</b> '+e[3]+'</div><div class="case-meaning"><b>'+m.meaning+'</b> '+e[4]+'<br><br><span class="case-label">'+m.evidence+'</span></div><button class="case-button" type="button">'+m.why+'</button></div></article>').join('');document.querySelectorAll('.case-button').forEach(b=>b.addEventListener('click',()=>{const c=b.closest('.case-quote');c.classList.toggle('open');b.textContent=c.classList.contains('open')?m.hide:m.why}))}
+  function renderWindows(i){const l=lang(),ws=windows[l]||windows.en;document.getElementById('caseWindows').innerHTML=ws.map((w,n)=>'<div class="case-window '+(n===i?'active':'')+'" data-w="'+n+'"><h4>'+w[0]+'</h4><p>'+w[1]+'</p></div>').join('');document.getElementById('caseWindowDetail').innerHTML=ws[i][2];document.querySelectorAll('.case-window').forEach(x=>x.addEventListener('click',()=>renderWindows(Number(x.dataset.w))))}
+  function renderFinal(){const l=lang(),arr=final[l]||final.en,d=demo[l]||demo.en;document.getElementById('finalTakeawayTitle').textContent=(l==='en'?'What ':l==='ru'?'Что ':l==='es'?'Lo que ':l==='it'?'Cosa ':l==='de'?'Was ':'What ')+d.finalName+(l==='es'?' se llevaría realmente después de la ruptura':l==='it'?' porterebbe davvero con sé dopo la rottura':l==='de'?' nach der Trennung tatsächlich mitnehmen würde':l==='ru'?' действительно вынесет из этой истории после расставания':' would actually take away after the breakup');document.getElementById('caseFinal').innerHTML=arr.map((x,i)=>'<div class="case-finding"><div class="case-number">'+(i+1)+'</div><p><b>'+x[0]+'</b><br>'+x[1]+'</p></div>').join('')}
+  window.renderAfterDemo=function(l){const d=demo[l]||demo.en;document.getElementById('caseNames').textContent=d.names;document.querySelector('[data-i18n="caseDates"]').textContent=d.dates;renderTab(document.querySelector('.case-tab.active')?.dataset.caseTab||'story');renderChart(6);renderEvidence();renderWindows(0);renderFinal()};
+  document.querySelectorAll('[data-case-tab]').forEach(x=>x.addEventListener('click',()=>renderTab(x.dataset.caseTab)));
+  window.renderAfterDemo(lang());
+})();
+</script>
+
+
+<script>
+(function(){
+  document.querySelectorAll(".answer-question").forEach(function(button){
+    button.addEventListener("click",function(){
+      const item=button.closest(".answer-item");
+      const wasOpen=item.classList.contains("open");
+      document.querySelectorAll(".answer-item").forEach(function(other){
+        other.classList.remove("open");
+      });
+      if(!wasOpen) item.classList.add("open");
+      document.querySelectorAll(".answer-item").forEach(function(o){o.querySelector(".answer-question").setAttribute("aria-expanded",o.classList.contains("open"))});
+    });
+  });
+})();
+</script>
+
+<!-- APP LOGIC -->
+
+<script>
+
+const input = document.getElementById('fileInput');
+const drop = document.getElementById('drop');
+const row = document.getElementById('fileRow');
+const nameEl = document.getElementById('fileName');
+const sizeEl = document.getElementById('fileSize');
+const btn = document.getElementById('analyze');
+const progress = document.getElementById('progress');
+const fill = document.getElementById('fill');
+const status = document.getElementById('status');
+const pct = document.getElementById('pct');
+const report = document.getElementById('report');
+
+let selectedFiles = [];
+let detectionState = new Map();
+let latestReport = null;
+
+function T(){ return translations[getLang()] || translations.en; }
+function languageName(){ return ({en:'English',ru:'Russian',es:'Spanish',it:'Italian',de:'German'})[getLang()] || 'English'; }
+function escapeHtml(v){ return String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+function fileKey(f){ return f.name + '|' + f.size + '|' + f.lastModified; }
+function formatKB(n){ return (n/1024).toFixed(1)+' KB'; }
+
+async function detectFile(file){
+  const key=fileKey(file);
+  detectionState.set(key,{source:'detecting',confidence:null});
+  renderFileList();
+  try{
+    // ZIP needs to be sent intact; slicing it breaks its directory. For TXT,
+    // a sample is enough for detection and avoids uploading the full archive twice.
+    const sample = /\.zip$/i.test(file.name) ? file : file.slice(0,2_000_000);
+    const fd=new FormData();
+    fd.append('file',sample,file.name);
+    const r=await fetch('/detect',{method:'POST',body:fd});
+    const data=await r.json();
+    if(!r.ok) throw new Error(data.detail || 'Source detection failed');
+    detectionState.set(key,{source:data.source||'unknown',confidence:data.confidence||0,inner:data.inner||[]});
+  }catch(e){
+    detectionState.set(key,{source:'error',confidence:0,error:e.message});
+  }
+  renderFileList();
+}
+
+function addFiles(files){
+  const incoming=Array.from(files||[]);
+  for(const file of incoming){
+    const key=fileKey(file);
+    if(selectedFiles.some(f=>fileKey(f)===key)) continue;
+    selectedFiles.push(file);
+    detectFile(file);
+  }
+  renderFileList();
+  btn.disabled=selectedFiles.length===0;
+}
+
+function removeFile(key){
+  const idx=selectedFiles.findIndex(f=>fileKey(f)===key);
+  if(idx<0) return;
+  const removed=selectedFiles[idx];
+  selectedFiles.splice(idx,1);
+  detectionState.delete(key);
+  renderFileList();
+  btn.disabled=selectedFiles.length===0;
+  // Allow selecting the same file again after removing it.
+  if(!selectedFiles.some(f=>fileKey(f)===fileKey(removed))) input.value='';
+}
+
+function sourceLabel(source){
+  const map={telegram:'Telegram',vk:'VK',whatsapp:'WhatsApp',instagram:'Instagram',messenger:'Messenger',discord:'Discord',html_generic:'HTML',unknown:'Unknown',detecting:'Detecting…',error:'Detection failed'};
+  return map[source]||source||'Unknown';
+}
+
+function renderFileList(){
+  row.classList.add('show');
+  if(!selectedFiles.length){
+    row.classList.remove('show');
+    nameEl.textContent='conversation.txt';
+    sizeEl.textContent=T().fileReady;
+    const emptyList=document.getElementById('afterFileList');
+    if(emptyList) emptyList.remove();
+    return;
+  }
+  nameEl.textContent=selectedFiles.length===1?selectedFiles[0].name:`${selectedFiles.length} files selected`;
+  sizeEl.textContent=selectedFiles.length===1?formatKB(selectedFiles[0].size)+' · '+T().fileReady:`${(selectedFiles.reduce((a,f)=>a+f.size,0)/1024/1024).toFixed(1)} MB total · ${T().fileReady}`;
+  let list=document.getElementById('afterFileList');
+  if(!list){
+    list=document.createElement('div'); list.id='afterFileList'; list.className='after-file-list'; row.parentNode.insertBefore(list,row.nextSibling);
+  }
+  list.innerHTML=selectedFiles.map(f=>{
+    const d=detectionState.get(fileKey(f))||{source:'detecting'};
+    const conf=d.confidence?` · ${Math.round(d.confidence*100)}%`:'';
+    const cls=d.source==='error'?'err':(d.source==='detecting'?'':'ok');
+    const sub=d.source==='error'?d.error:`${formatKB(f.size)} · ${sourceLabel(d.source)}${conf}`;
+    return `<div class="after-file-item"><div class="after-file-meta"><div class="after-file-name">${escapeHtml(f.name)}</div><div class="after-file-sub">${escapeHtml(sub)}</div></div><div class="after-file-status ${cls}">${escapeHtml(sourceLabel(d.source))}</div><button class="after-file-remove" type="button" data-remove="${escapeHtml(fileKey(f))}">×</button></div>`;
+  }).join('');
+  list.querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',(event)=>{
+    event.preventDefault();
+    event.stopPropagation();
+    removeFile(b.getAttribute('data-remove'));
+  }));
+}
+
+input.addEventListener('change',()=>addFiles(input.files));
+['dragenter','dragover'].forEach(event=>drop.addEventListener(event,e=>{e.preventDefault();drop.classList.add('drag');}));
+['dragleave','drop'].forEach(event=>drop.addEventListener(event,e=>{e.preventDefault();drop.classList.remove('drag');}));
+drop.addEventListener('drop',e=>addFiles(e.dataTransfer.files));
+
+function setProgress(text,percent,detail=''){
+  status.textContent=text;
+  pct.textContent=Math.round(percent)+'%';
+  fill.style.width=Math.max(0,Math.min(100,percent))+'%';
+  const d=document.getElementById('progressDetail');
+  if(d) d.textContent=detail || '';
+}
+
+function progressCopy(stage){
+  const lang=getLang();
+  const map={
+    en:{parsed:['Export read','The conversation is parsed.'],starting_ai:['Starting analysis','Checking the archive and preparing evidence.'],selecting_evidence:['Selecting evidence','Finding representative messages across the whole timeline.'],preparing_ai:['Preparing AI analysis','Balancing both participants and important periods.'],building_report:['Reconstructing the story','Combining communication patterns, rituals and turning points.'],finalizing_report:['Finishing the report','Checking chronology, evidence and uncertainty.'],checking_report:['Checking the result','Making sure the report is internally consistent.'],complete:['Analysis complete','Opening your relationship report.']},
+    ru:{parsed:['Архив прочитан','Сообщения распознаны и подготовлены.'],starting_ai:['Запускаем анализ','Проверяем архив и готовим доказательства.'],selecting_evidence:['Выбираем доказательства','Ищем характерные сообщения по всей временной шкале.'],preparing_ai:['Готовим AI-анализ','Балансируем участников и важные периоды.'],building_report:['Восстанавливаем историю','Собираем паттерны общения, ритуалы и точки изменений.'],finalizing_report:['Заканчиваем отчёт','Проверяем хронологию, доказательства и неопределённость.'],checking_report:['Проверяем результат','Проверяем внутреннюю согласованность отчёта.'],complete:['Анализ завершён','Открываем отчёт об отношениях.']},
+    de:{parsed:['Export gelesen','Die Nachrichten wurden vorbereitet.'],starting_ai:['Analyse wird gestartet','Archiv und Belege werden vorbereitet.'],selecting_evidence:['Belege werden ausgewählt','Repräsentative Nachrichten werden über die gesamte Zeit gesucht.'],preparing_ai:['AI-Analyse wird vorbereitet','Beide Personen und wichtige Zeiträume werden berücksichtigt.'],building_report:['Geschichte wird rekonstruiert','Muster, Routinen und Wendepunkte werden zusammengeführt.'],finalizing_report:['Bericht wird fertiggestellt','Chronologie und Belege werden geprüft.'],checking_report:['Ergebnis wird geprüft','Der Bericht wird auf Konsistenz geprüft.'],complete:['Analyse abgeschlossen','Der Beziehungsbericht wird geöffnet.']}
+  };
+  return (map[lang]||map.en)[stage] || [stage.replaceAll('_',' '),'Analysis is still running…'];
+}
+
+function applyServerProgress(data){
+  const [title,detail]=progressCopy(data.stage||'starting_ai');
+  setProgress(title,data.progress||0,detail);
+}
+
+function setText(selector,text){const el=document.querySelector(selector);if(el)el.textContent=text||'';}
+function formatDateRange(start,end){return start&&end?(start===end?start:`${start} → ${end}`):start||end||'';}
+function compactNumber(n){if(n>=1e6)return (n/1e6).toFixed(1)+'m';if(n>=1e3)return (n/1e3).toFixed(1)+'k';return String(n??0);}
+
+function renderLiveReport(payload){
+  latestReport=payload;
+  const r=payload.ai_report;
+  const stats=payload.analysis?.statistics||{};
+  if(!r) return;
+  let pdfWrap=document.getElementById('pdfDownloadWrap');
+  if(!pdfWrap){pdfWrap=document.createElement('div');pdfWrap.id='pdfDownloadWrap';pdfWrap.className='pdf-download-wrap';report.prepend(pdfWrap);}
+  pdfWrap.innerHTML='<button type="button" id="downloadPdfBtn" class="pdf-download-btn">Download PDF report</button>';
+  document.getElementById('downloadPdfBtn').onclick=async()=>{
+    const b=document.getElementById('downloadPdfBtn'); b.disabled=true; b.textContent='Preparing PDF…';
+    try{const resp=await fetch('/report/pdf',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); if(!resp.ok){let e='PDF generation failed';try{const j=await resp.json();e=j.detail||e}catch(_){}throw new Error(e)} const blob=await resp.blob(); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='after_relationship_report.pdf'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000); b.textContent='PDF downloaded'; setTimeout(()=>{b.textContent='Download PDF report';b.disabled=false},1500);}catch(e){alert(e.message);b.textContent='Download PDF report';b.disabled=false;}};
+  const phases=r.relationship_phases||[];
+  const turns=r.turning_points||[];
+  const metrics=r.before_after||[];
+  const timeline=r.timeline||[];
+  const evidence=r.evidence||[];
+  const windows=r.intervention_windows||[];
+  const answers=r.breakup_answers||[];
+
+  document.querySelector('#caseNames').textContent = r.title || 'After relationship report';
+  const topP=document.querySelector('.case-hero p');
+  if(topP) topP.innerHTML=`<b>${escapeHtml(formatDateRange(stats.start_date,stats.end_date))}</b> ${escapeHtml(r.overall_story||'')}`;
+  const pills=document.querySelectorAll('.case-pill');
+  if(pills[0]) pills[0].textContent=`${compactNumber(stats.total_messages||payload.total_messages)} messages`;
+  if(pills[1]) pills[1].textContent=stats.start_date&&stats.end_date?formatDateRange(stats.start_date,stats.end_date):'';
+  if(pills[2]) pills[2].textContent=`${phases.length} major phases`;
+  if(pills[3]) pills[3].textContent=`${turns.length} turning points`;
+
+  const shift=r.structural_shift||{};
+  const result=document.querySelector('.case-result');
+  if(result){
+    const big=result.querySelector('.case-big'); if(big) big.textContent=shift.date||'Not established';
+    const p=result.querySelector('p'); if(p) p.textContent=shift.description||'';
+    const verdict=result.querySelector('.case-verdict span'); if(verdict) verdict.textContent=r.overall_story||'';
+  }
+
+  const kpis=document.querySelectorAll('.case-kpi');
+  if(kpis[0]) kpis[0].querySelector('b').textContent=stats.start_date&&stats.end_date?formatDateRange(stats.start_date,stats.end_date):'—';
+  if(kpis[1]) kpis[1].querySelector('b').textContent=compactNumber(stats.total_messages||0);
+  if(kpis[2]) kpis[2].querySelector('b').textContent=phases.length;
+  if(kpis[3]) kpis[3].querySelector('b').textContent=turns.length;
+  if(kpis[4]) kpis[4].querySelector('b').textContent=shift.date||'—';
+  if(kpis[5]) kpis[5].querySelector('b').textContent=shift.confidence||'—';
+
+  // Ask-the-report tabs
+  const tabData={story:['What happened?',r.overall_story],when:['When did it start?',shift.description||'The archive does not establish a structural shift with enough confidence.'],feelings:['Was they pulling away?',(answers.find(x=>/pull|away|отдал|дистан|allont|alej|zurück/i.test(x.question))||answers[1]||{}).answer||'Not established from the available evidence.'],other:['Could there be someone else?',(answers.find(x=>/someone|other|друг|persona|otra|andere/i.test(x.question))||{}).answer||'No direct evidence establishes another person.'],action:['Could I have changed it?',(answers.find(x=>/save|change|спас|измен|salv|cambi|sauv|rett/i.test(x.question))||{}).answer||'See the intervention windows below.']};
+  const output=document.getElementById('caseOutput');
+  function renderAsk(key){const d=tabData[key]||tabData.story;output.innerHTML=`<div class="case-answer"><b>${escapeHtml(d[0])}</b><p>${escapeHtml(d[1])}</p></div>`;document.querySelectorAll('[data-case-tab]').forEach(b=>b.classList.toggle('active',b.dataset.caseTab===key));}
+  document.querySelectorAll('[data-case-tab]').forEach(b=>{b.onclick=()=>renderAsk(b.dataset.caseTab)}); renderAsk('story');
+
+  // Timeline uses backend-derived observable metrics.
+  const chart=document.getElementById('caseChart');
+  const info=document.getElementById('caseChartInfo');
+  if(chart){
+    chart.innerHTML=timeline.map((p,i)=>`<div class="case-bar ${i===0?'active':''}" style="height:${Math.max(8,Math.min(100,p.signal||0))}%" data-i="${i}"><span>${escapeHtml(p.label||p.period)}</span></div>`).join('');
+    const show=i=>{const p=timeline[i]||timeline[0];if(!p)return;chart.querySelectorAll('.case-bar').forEach(x=>x.classList.toggle('active',Number(x.dataset.i)===i));if(info)info.innerHTML=`<b>${escapeHtml(p.label||p.period)}</b><br>${escapeHtml(p.summary||'')}<br><small>Signal ${p.signal}/100 · Reciprocity ${p.reciprocity}/100 · Repair ${p.repair}/100 · Future plans ${p.future_plans}/100 · Affection markers ${p.affection}/100</small>`;};
+    chart.querySelectorAll('.case-bar').forEach(b=>b.onclick=()=>show(Number(b.dataset.i))); show(0);
+  }
+
+  // Real archive activity charts: full parsed data, grouped by year, not AI timeline.
+  const activityStats=payload.analysis?.statistics||{};
+  const activityYears=[...new Set([
+    ...Object.keys(activityStats.messages_by_year||{}),
+    ...Object.keys(activityStats.messages_by_day||{}).map(k=>k.slice(0,4)),
+    ...Object.keys(activityStats.messages_by_month||{}).map(k=>k.slice(0,4))
+  ])].filter(y=>/^\d{4}$/.test(y)).sort();
+  let activityBox=document.getElementById('afterActivityCharts');
+  if(!activityBox){activityBox=document.createElement('div');activityBox.id='afterActivityCharts';activityBox.className='case-box';const grid=document.querySelector('.case-grid');if(grid)grid.after(activityBox);else report.append(activityBox);}
+  activityBox.innerHTML=`<div class="case-kicker">Archive activity</div><h3 style="margin-top:7px">Daily and weekly message volume</h3><p style="color:var(--muted);line-height:1.5">Counts are calculated from every successfully parsed message, including older imported files. Choose a year to inspect it separately.</p><div class="after-activity-controls"><label for="afterActivityYear">Year</label><select id="afterActivityYear">${activityYears.map(y=>`<option value="${y}">${y}</option>`).join('')}</select><button type="button" data-activity-view="day" class="active">Daily</button><button type="button" data-activity-view="week">Weekly</button><button type="button" data-activity-view="month">Monthly</button></div><div id="afterActivitySummary" class="after-activity-summary"></div><div id="afterActivityChart" class="after-activity-chart"></div>`;
+  const yearSelect=activityBox.querySelector('#afterActivityYear');
+  let activityView='day';
+  const renderActivityChart=()=>{
+    const year=yearSelect?.value;
+    const keyMap={day:'messages_by_day',week:'messages_by_week',month:'messages_by_month'};
+    const source=activityStats[keyMap[activityView]]||{};
+    let entries=Object.entries(source).filter(([key])=>activityView==='week'?key.startsWith(year+'-W'):key.startsWith(year+'-'));
+    // Week 1 can belong to the adjacent calendar year; use the ISO week-year.
+    entries.sort((a,b)=>a[0].localeCompare(b[0]));
+    const total=entries.reduce((sum,[,v])=>sum+Number(v||0),0);
+    const max=Math.max(1,...entries.map(([,v])=>Number(v||0)));
+    const chartEl=activityBox.querySelector('#afterActivityChart');
+    const summary=activityBox.querySelector('#afterActivitySummary');
+    summary.textContent=`${year||'—'} · ${total.toLocaleString()} messages · ${entries.length} ${activityView==='day'?'days':activityView==='week'?'weeks':'months'} with activity`;
+    if(!entries.length){chartEl.innerHTML='<div class="after-activity-empty">No parsed messages for this period.</div>';return;}
+    chartEl.innerHTML=entries.map(([key,value])=>{const count=Number(value||0);const height=Math.max(2,Math.round(count/max*145));const label=activityView==='day'?key.slice(5):activityView==='week'?key.slice(5):key.slice(5);return `<div class="after-activity-bar" title="${escapeHtml(key)}: ${count.toLocaleString()} messages"><i style="height:${height}px"></i><small>${escapeHtml(label)}</small></div>`;}).join('');
+  };
+  if(yearSelect&&activityYears.length){yearSelect.value=activityYears[activityYears.length-1];yearSelect.addEventListener('change',renderActivityChart);activityBox.querySelectorAll('[data-activity-view]').forEach(button=>button.addEventListener('click',()=>{activityView=button.dataset.activityView;activityBox.querySelectorAll('[data-activity-view]').forEach(b=>b.classList.toggle('active',b===button));renderActivityChart();}));renderActivityChart();}
+  else {activityBox.querySelector('#afterActivitySummary').textContent='No dated messages were parsed. Check the per-file message counts and date formats.';activityBox.querySelector('#afterActivityChart').innerHTML='<div class="after-activity-empty">No date-based activity data.</div>';}
+
+  // Rich narrative sections: phases, turning points, communication dynamics and loops.
+  let details=document.getElementById('liveReportDetails');
+  if(!details){
+    details=document.createElement('div');
+    details.id='liveReportDetails';
+    details.style.cssText='margin-top:13px;display:grid;gap:13px';
+    const grid=document.querySelector('.case-grid');
+    if(grid) grid.after(details);
+  }
+  const list=(arr,empty='No sufficiently supported observations returned.')=>Array.isArray(arr)&&arr.length?arr.map(x=>`<li style="margin:7px 0;line-height:1.5">${escapeHtml(x)}</li>`).join(''):`<li style="margin:7px 0;color:var(--muted)">${escapeHtml(empty)}</li>`;
+  const phasesHtml=phases.map((p,i)=>`<div class="phase"><div class="dot"></div><b>${escapeHtml(p.name)}</b><small>${escapeHtml(p.period)}<br>${escapeHtml(p.summary)}</small></div>`).join('');
+  const turnsHtml=turns.map((t,i)=>`<div class="finding"><div class="n">${i+1}</div><p><b>${escapeHtml(t.date)} · ${escapeHtml(t.title)}</b><br>${escapeHtml(t.what_changed)}<br><span style="color:var(--muted)">${escapeHtml(t.why_it_matters)}</span></p></div>`).join('');
+  const dynamics=r.communication_dynamics||[];
+  const loops=r.recurring_loops||[];
+  const repairs=r.repair_attempts||[];
+  const affection=r.affection_patterns||[];
+  const future=r.future_plans||[];
+  const monthly=payload.analysis?.monthly_relationship_metrics||[];
+  const volumeMax=Math.max(1,...monthly.map(x=>x.messages||0));
+  const volumeHtml=monthly.slice(-18).map(x=>`<div style="display:flex;align-items:end;gap:8px;height:150px"><div title="${escapeHtml(x.month)}: ${x.messages} messages" style="height:${Math.max(4,(x.messages/volumeMax)*100)}%;flex:1;background:var(--accent);border-radius:7px 7px 2px 2px;min-width:7px"></div><small style="font-size:9px;writing-mode:vertical-rl;transform:rotate(180deg);color:var(--muted)">${escapeHtml(x.month.slice(2))}</small></div>`).join('');
+  details.innerHTML=`
+    <div class="case-box"><div class="case-kicker">Relationship phases</div><h3 style="margin-top:7px">How the relationship evolved</h3><div class="timeline">${phasesHtml}</div></div>
+    <div class="case-box"><div class="case-kicker">Turning points</div><h3 style="margin-top:7px">Where the communication system changed</h3>${turnsHtml||'<p style="color:var(--muted)">No turning point was supported strongly enough to show.</p>'}</div>
+    <div class="case-box"><div class="case-kicker">Communication dynamics</div><h3 style="margin-top:7px">What the archive shows about interaction</h3><ul style="padding-left:20px;margin-bottom:0">${list(dynamics)}</ul></div>
+    <div class="case-box"><div class="case-kicker">Recurring patterns</div><h3 style="margin-top:7px">Loops that repeated</h3><ul style="padding-left:20px;margin-bottom:0">${list(loops)}</ul></div>
+    <div class="case-box"><div class="case-kicker">Repair attempts</div><h3 style="margin-top:7px">What happened after conflict</h3><ul style="padding-left:20px;margin-bottom:0">${list(repairs)}</ul></div>
+    <div class="case-box"><div class="case-kicker">Closeness & future</div><h3 style="margin-top:7px">Affection and future-oriented communication</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div><b>Affection</b><ul style="padding-left:20px">${list(affection)}</ul></div><div><b>Future plans</b><ul style="padding-left:20px">${list(future)}</ul></div></div></div>
+    <div class="case-box"><div class="case-kicker">Message volume</div><h3 style="margin-top:7px">Communication intensity by month</h3><p style="color:var(--muted);line-height:1.5">This chart is directly calculated from the parsed archive, not generated by AI.</p><div style="display:flex;align-items:end;gap:4px;overflow-x:auto;padding:10px 0">${volumeHtml||'<span style="color:var(--muted)">No monthly data.</span>'}</div></div>`;
+
+  const bars=document.querySelector('.case-bars');
+  if(bars){
+    bars.innerHTML=metrics.map(m=>`<div class="case-row"><b>${escapeHtml(m.metric)}</b><div class="case-progress"><i style="width:${Math.max(0,Math.min(100,m.after_value||0))}%"></i></div><span>${m.before_value}→${m.after_value}</span></div>`).join('');
+  }
+
+  const ev=document.getElementById('caseEvidence');
+  if(ev){ev.innerHTML=evidence.slice(0,12).map((e,i)=>`<div class="evidence-item"><b>${escapeHtml(e.date)} · ${escapeHtml(e.speaker)}</b><div style="margin-top:6px">“${escapeHtml(e.quote)}”</div><small>${escapeHtml(e.source)} · ${escapeHtml(e.interpretation||e.context||'')}</small></div>`).join('')||'<div class="case-note">No evidence items were returned.</div>';}
+
+  const win=document.getElementById('caseWindows'); const winDetail=document.getElementById('caseWindowDetail');
+  if(win){win.innerHTML=windows.map((w,i)=>`<button type="button" class="case-window ${i===0?'active':''}" data-w="${i}"><b>${escapeHtml(w.period)}</b><small>${escapeHtml(w.type)}</small></button>`).join('');
+    const showW=i=>{const w=windows[i]||windows[0];if(!w)return;win.querySelectorAll('.case-window').forEach(x=>x.classList.toggle('active',Number(x.dataset.w)===i));if(winDetail)winDetail.innerHTML=`<b>${escapeHtml(w.assessment)}</b><p>${escapeHtml(w.reason)}</p>`;};
+    win.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>showW(Number(b.dataset.w))); showW(0);
+  }
+
+  const final=document.getElementById('caseFinal');
+  if(final){final.innerHTML=`<p>${escapeHtml(r.overall_story||'')}</p><div class="verdict-line">${escapeHtml(turns[0]?.why_it_matters||'The report is based on the available message evidence and should be read with its limitations.')}</div>`;}
+  const title=document.getElementById('finalTakeawayTitle'); if(title) title.textContent='What the archive actually supports';
+
+  const answerItems=document.querySelectorAll('.breakup-answers .answer-item');
+  answerItems.forEach((item,i)=>{const a=answers[i];if(!a)return;const q=item.querySelector('.answer-question strong');const body=item.querySelector('.answer-lead');if(q)q.textContent=a.question;if(body)body.innerHTML=`${escapeHtml(a.answer)}<div style="margin-top:8px;font-size:11px;color:var(--muted)">Confidence: ${escapeHtml(a.confidence||'not stated')}</div>`;});
+
+  let note=document.getElementById('liveReportNote');
+  if(!note){note=document.createElement('div');note.id='liveReportNote';note.className='live-report-note';report.prepend(note);}
+  note.textContent=`Live report · ${payload.total_messages||0} unique messages · ${payload.duplicates_removed||0} duplicates removed · sources: ${Object.entries(payload.source_summary||{}).map(([k,v])=>`${k} ${v}`).join(', ')}. Timeline numbers are backend-derived communication indices, not emotion scores.`;
+}
+
+async function pollAnalysis(jobId){
+  while(true){
+    const response=await fetch('/analysis/'+encodeURIComponent(jobId),{cache:'no-store'});
+    const data=await response.json();
+    if(!response.ok) throw new Error(data.detail||'Analysis status failed');
+    applyServerProgress(data);
+    if(data.status==='complete') return data.result;
+    if(data.status==='error'){
+      const msg=data.error || data.result?.ai_error || 'AI analysis failed';
+      throw new Error(msg);
+    }
+    await new Promise(r=>setTimeout(r,900));
+  }
+}
+
+async function inspectSelectedFilesForSpeakers(){
+  if(selectedFiles.length<2)return {};
+  const previews=[];
+  for(let i=0;i<selectedFiles.length;i++){
+    const file=selectedFiles[i], fd=new FormData();fd.append('file',file,file.name);
+    const response=await fetch('/preview',{method:'POST',body:fd});
+    const data=await response.json();
+    if(!response.ok)throw new Error(data.detail||`Could not inspect ${file.name}`);
+    previews.push({index:i,file,participants:(data.participants||[]).filter(x=>x.name).map(x=>({name:String(x.name),messages:Number(x.messages||0)}))});
+  }
+  const nonEmpty=previews.filter(p=>p.participants.length);
+  if(nonEmpty.length<2)return {};
+  const firstSet=nonEmpty[0].participants.map(p=>p.name.trim().toLocaleLowerCase()).sort().join('|');
+  const mismatch=nonEmpty.some(p=>p.participants.map(x=>x.name.trim().toLocaleLowerCase()).sort().join('|')!==firstSet);
+  if(!mismatch)return {};
+  return await showSpeakerMappingModal(previews);
+}
+
+function showSpeakerMappingModal(previews){
+  const ru=getLang()==='ru';
+  const labels=ru?{title:'Кто есть кто?',intro:'В файлах участники могут называться по-разному. Соотнеси никнеймы одного и того же человека, чтобы After объединил сообщения корректно.',separate:'Оставить отдельным участником',choose:'Выбери участника…',cancel:'Отмена',confirm:'Продолжить анализ',error:'Для каждого никнейма выбери человека или вариант «Оставить отдельным участником».',count:'сообщений'}:{title:'Who is who?',intro:'Participants may have different nicknames in different exports. Match nicknames belonging to the same person so After can combine their messages correctly.',separate:'Keep as a separate participant',choose:'Choose a person…',cancel:'Cancel',confirm:'Continue analysis',error:'Choose a person or “Keep as a separate participant” for every nickname.',count:'messages'};
+  const allNames=[];previews.forEach(p=>p.participants.forEach(x=>{if(!allNames.some(n=>n.toLocaleLowerCase()===x.name.trim().toLocaleLowerCase()))allNames.push(x.name.trim())}));
+  const first=previews.find(p=>p.participants.length);const canonical=(first?.participants||[]).map(x=>x.name.trim());
+  for(const name of allNames){if(canonical.length>=2)break;if(!canonical.some(x=>x.toLocaleLowerCase()===name.toLocaleLowerCase()))canonical.push(name)}
+  if(canonical.length<2)return Promise.resolve({});
+  return new Promise(resolve=>{
+    const backdrop=document.createElement('div');backdrop.className='speaker-map-backdrop';backdrop.setAttribute('role','presentation');
+    const dialog=document.createElement('div');dialog.className='speaker-map-dialog';dialog.setAttribute('role','dialog');dialog.setAttribute('aria-modal','true');dialog.setAttribute('aria-labelledby','speakerMapTitle');
+    const rows=previews.filter(p=>p.participants.length).map(p=>`<div class="speaker-map-file"><div class="speaker-map-file-title">${escapeHtml(p.file.name)}</div>${p.participants.map(person=>{const exact=canonical.find(c=>c.toLocaleLowerCase()===person.name.trim().toLocaleLowerCase());const initial=exact||'';return `<div class="speaker-map-row"><div><div class="speaker-map-nick">${escapeHtml(person.name)}</div><div class="speaker-map-count">${person.messages.toLocaleString()} ${labels.count}</div></div><select class="speaker-map-select" data-file-index="${p.index}" data-speaker="${escapeHtml(person.name)}"><option value="">${escapeHtml(labels.choose)}</option>${canonical.map(c=>`<option value="${escapeHtml(c)}" ${initial===c?'selected':''}>${escapeHtml(c)}</option>`).join('')}<option value="__separate__">${escapeHtml(labels.separate)}</option></select></div>`}).join('')}</div>`).join('');
+    dialog.innerHTML=`<h2 id="speakerMapTitle">${labels.title}</h2><p class="speaker-map-intro">${labels.intro}</p><div>${rows}</div><div class="speaker-map-error" id="speakerMapError">${labels.error}</div><div class="speaker-map-actions"><button type="button" class="speaker-map-cancel" data-map-cancel>${labels.cancel}</button><button type="button" class="speaker-map-confirm" data-map-confirm>${labels.confirm}</button></div>`;
+    backdrop.appendChild(dialog);document.body.appendChild(backdrop);const close=value=>{backdrop.remove();resolve(value)};
+    dialog.querySelector('[data-map-cancel]').onclick=()=>close(null);backdrop.addEventListener('click',e=>{if(e.target===backdrop)close(null)});
+    dialog.querySelector('[data-map-confirm]').onclick=()=>{const selects=[...dialog.querySelectorAll('.speaker-map-select')];if(selects.some(x=>!x.value)){dialog.querySelector('#speakerMapError').style.display='block';return;}const mapping={};selects.forEach(x=>{if(x.value&&x.value!=='__separate__')mapping[`${x.dataset.fileIndex}::${x.dataset.speaker}`]=x.value});close(mapping)};
+    dialog.querySelector('.speaker-map-select')?.focus();
+  });
+}
+
+btn.onclick=async()=>{
+  if(!selectedFiles.length)return;
+  btn.disabled=true; progress.classList.add('show');
+  try{
+    setProgress('Checking participants',3,'Checking whether nicknames differ between the selected exports.');
+    const speakerMapping=await inspectSelectedFilesForSpeakers();
+    if(speakerMapping===null){setProgress('Ready',0,'Mapping cancelled. Your files are still selected.');return;}
+    const fd=new FormData();
+    selectedFiles.forEach(f=>fd.append('files',f,f.name));
+    fd.append('language',languageName());
+    fd.append('speaker_mapping',JSON.stringify(speakerMapping||{}));
+    setProgress('Uploading export',8,'Sending the selected file(s) to the local server.');
+    const response=await fetch('/upload',{method:'POST',body:fd});
+    const queued=await response.json();
+    if(!response.ok) throw new Error(queued.detail||'Analysis failed');
+    setProgress('Export read',queued.progress||4,'The conversation is parsed. AI analysis will now run step by step.');
+    const data=await pollAnalysis(queued.job_id);
+    if(data.ai_error) throw new Error('AI analysis failed: '+data.ai_error);
+    setProgress('Analysis complete',100,'Opening your relationship report.');
+    window.afterAnalysis=data;
+    try{sessionStorage.setItem('afterReport',JSON.stringify(data));}catch(storageErr){console.warn('Could not persist report in sessionStorage',storageErr);}
+    setTimeout(()=>{window.location.href='report.html';},250);
+  }catch(err){
+    setProgress('Analysis stopped',100,err.message);
+    alert(err.message);
+  }finally{btn.disabled=selectedFiles.length===0;}
+};
+
+function updateFile(){
+  if(!selectedFiles.length){sizeEl.textContent=T().fileReady;return;}
+  sizeEl.textContent=selectedFiles.length===1?formatKB(selectedFiles[0].size)+' · '+T().fileReady:`${selectedFiles.length} files · ${T().fileReady}`;
+}
+window.afterLangHook=()=>{updateFile();renderFileList();};
+updateFile();
+renderFileList();
+
+</script>
+
+</body>
+</html>
