@@ -1,0 +1,12 @@
+After update — 18 October 2026
+
+Files included:
+- main.py: preserved from the latest supplied backend file. It already imports timedelta, fixing the previously reported NameError in build_free_report.
+- report.html: preserved current report features and pricing/currency interface; marker cards explicitly describe absolute message counts, and the explanatory text now correctly says these are counts rather than shares. Year-boundary labels are guarded against repeated year labels.
+- index.html: preserved existing upload and report workflow; added a localized rotating progress detail line (EN/RU/ES/IT/DE) so users see that processing is continuing. It stops when processing completes or errors.
+
+Validation performed:
+- Python syntax compilation passed for main.py.
+- Inline JavaScript syntax parsing passed for index.html and report.html.
+
+Not performed: live browser test against a running backend, because no server/runtime credentials are connected in this session.
