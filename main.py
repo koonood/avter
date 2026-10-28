@@ -16,6 +16,7 @@ import zipfile
 import io
 import hashlib
 import os
+import math
 import threading
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -28,8 +29,8 @@ except ImportError:
 app = FastAPI()
 APP_DIR = Path(__file__).resolve().parent
 
-# One-time AI report pricing is quoted by selected message count. These are
-# display/quote values only; payment processing is not connected in this build.
+# One-time AI report pricing uses fixed packages based on the number of
+# messages in the selected period. Payment processing is not connected yet.
 AI_PRICE_TIERS = [
     {"max_messages": 1000, "prices": {"RUB": 149, "EUR": 1.49, "USD": 1.49}},
     {"max_messages": 5000, "prices": {"RUB": 249, "EUR": 3.99, "USD": 3.99}},
@@ -38,13 +39,14 @@ AI_PRICE_TIERS = [
     {"max_messages": 60000, "prices": {"RUB": 899, "EUR": 10.99, "USD": 11.99}},
     {"max_messages": 100000, "prices": {"RUB": 1390, "EUR": 15.99, "USD": 17.99}},
     {"max_messages": 150000, "prices": {"RUB": 1990, "EUR": 22.99, "USD": 24.99}},
+    {"max_messages": 1000000000, "prices": {"RUB": 2990, "EUR": 34.99, "USD": 39.99}},
 ]
 
-AI_PRICE_MINIMUM = {"RUB": 99, "EUR": 0.99, "USD": 0.99}
+AI_PRICE_MINIMUM = dict(AI_PRICE_TIERS[0]["prices"])
 
 
 def ai_price_for_count(message_count, currency="EUR"):
-    """Quote a smoothly scaled one-time price from the exact selected message count."""
+    """Return the fixed one-time package price for the selected message count."""
     currency = str(currency or "EUR").upper()
     if currency not in {"RUB", "EUR", "USD"}:
         currency = "EUR"
@@ -52,30 +54,10 @@ def ai_price_for_count(message_count, currency="EUR"):
     if count == 0:
         return 0
 
-    anchors = [(1, AI_PRICE_MINIMUM[currency])]
     for tier in AI_PRICE_TIERS:
-        limit = tier["max_messages"]
-        anchors.append((int(limit), float(tier["prices"][currency])))
-    anchors.sort(key=lambda item: item[0])
-
-    def interpolate(x, left, right):
-        x0, y0 = left
-        x1, y1 = right
-        if x1 <= x0:
-            value = y1
-        else:
-            value = y0 + (y1 - y0) * ((x - x0) / (x1 - x0))
-        scale = 1 if currency == "RUB" else 100
-        return int(value * scale + 0.5) / scale
-
-    for left, right in zip(anchors, anchors[1:]):
-        if count <= right[0]:
-            return interpolate(count, left, right)
-
-    # Above the last reference point, keep scaling at the same marginal rate;
-    # very large archives do not fall into a single flat-price bucket.
-    left, right = anchors[-2], anchors[-1]
-    return interpolate(count, right, (right[0] + (right[0] - left[0]), right[1] + (right[1] - left[1])))
+        if count <= int(tier["max_messages"]):
+            return tier["prices"][currency]
+    return AI_PRICE_TIERS[-1]["prices"][currency]
 
 # In-process analysis jobs. This keeps the UI responsive while AI calls run.
 ANALYSIS_JOBS = {}
@@ -2328,7 +2310,8 @@ def root():
     index_path = APP_DIR / "index.html"
     if not index_path.is_file():
         raise HTTPException(status_code=503, detail=f"Upload page is missing beside the application: {index_path.name}")
-    return FileResponse(index_path)
+    # The landing page changes with app updates; avoid stale cached HTML/JS.
+    return FileResponse(index_path, headers={"Cache-Control": "no-store, max-age=0"})
 
 
 @app.get("/health")
@@ -2354,7 +2337,7 @@ def legal_information():
     legal_path = APP_DIR / "legal.html"
     if not legal_path.is_file():
         raise HTTPException(status_code=503, detail="Legal information page is missing beside the application: legal.html")
-    return FileResponse(legal_path)
+    return FileResponse(legal_path, headers={"Cache-Control": "no-store, max-age=0"})
 
 
 @app.post("/detect")
@@ -2603,6 +2586,15 @@ async def report_pdf(payload: dict):
         if n>=1e6: return f"{n/1e6:.1f}m"
         if n>=1e3: return f"{n/1e3:.1f}k"
         return str(int(n)) if n.is_integer() else f"{n:.1f}"
+    def finite_number(value, default=0.0):
+        """Convert optional numeric chart data without letting null/NaN break PDF export."""
+        if value is None:
+            return default
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            return default
+        return number if math.isfinite(number) else default
     def header(kicker,title,sub=None):
         x=[P(kicker,"AKicker"),Paragraph(escape(title),styles["AH1"])]
         if sub: x.append(P(sub,"ASmall"))
@@ -2631,10 +2623,10 @@ async def report_pdf(payload: dict):
 
     def volume_chart(rows):
         rows=rows[-18:]
-        W,H=500,190; d=Drawing(W,H); maxv=max([float(x.get("messages",0)) for x in rows] or [1]);
+        W,H=500,190; d=Drawing(W,H); maxv=max([finite_number(x.get("messages")) for x in rows] or [1]);
         chart_h=135; base=25; gap=W/max(1,len(rows)); bar=max(8,gap*0.55)
         for i,x in enumerate(rows):
-            val=float(x.get("messages",0)); h=max(2,chart_h*val/maxv); xx=i*gap+(gap-bar)/2
+            val=finite_number(x.get("messages")); h=max(2,chart_h*val/maxv); xx=i*gap+(gap-bar)/2
             d.add(Rect(xx,base,bar,h,fillColor=PURPLE,strokeColor=None,rx=3,ry=3))
             lab=safe(x.get("month",""))[-5:]
             d.add(String(xx+bar/2,10,lab,fontName=base_font,fontSize=6,fillColor=MUTED,textAnchor="middle"))
@@ -2647,14 +2639,28 @@ async def report_pdf(payload: dict):
         W,H=500,205; d=Drawing(W,H); L,R,T,B=28,10,18,34; iw=W-L-R; ih=H-T-B
         for v in (0,25,50,75,100):
             y=B+ih*v/100; d.add(Line(L,y,W-R,y,strokeColor=LINE,strokeWidth=.5)); d.add(String(L-5,y-2,str(v),fontName=base_font,fontSize=6,fillColor=MUTED,textAnchor="end"))
-        pts=[]
+        points=[]
         for i,x in enumerate(rows):
-            xx=L+(iw*i/max(1,len(rows)-1)); yy=B+ih*float(x.get("signal",0))/100; pts.append((xx,yy))
-        if len(pts)>1: d.add(PolyLine(pts,strokeColor=PURPLE,strokeWidth=3,strokeLineJoin=1,strokeLineCap=1))
-        for i,(xx,yy) in enumerate(pts):
+            xx=L+(iw*i/max(1,len(rows)-1))
+            raw=x.get("signal")
+            signal=None if raw is None else finite_number(raw,None)
+            if signal is not None:
+                signal=max(0.0,min(100.0,signal))
+                yy=B+ih*signal/100
+                points.append((xx,yy,round(signal)))
+            else:
+                points.append(None)
+            d.add(String(xx,H-7,safe(x.get("label") or x.get("period") or "")[:12],fontName=base_font,fontSize=6,fillColor=MUTED,textAnchor="middle"))
+        # Missing values are gaps in the series, not zero-valued signals.
+        for i,point in enumerate(points):
+            if point is None:
+                continue
+            xx,yy,value=point
+            if i and points[i-1] is not None:
+                prev=points[i-1]
+                d.add(PolyLine([(prev[0],prev[1]),(xx,yy)],strokeColor=PURPLE,strokeWidth=3,strokeLineJoin=1,strokeLineCap=1))
             d.add(Circle(xx,yy,4,fillColor=WHITE,strokeColor=PURPLE,strokeWidth=2))
-            d.add(String(xx,yy+9,str(round(float(rows[i].get("signal",0))),),fontName=base_font,fontSize=6,fillColor=TEXT,textAnchor="middle"))
-            d.add(String(xx,H-7,safe(rows[i].get("label") or rows[i].get("period") or "")[:12],fontName=base_font,fontSize=6,fillColor=MUTED,textAnchor="middle"))
+            d.add(String(xx,yy+9,str(value),fontName=base_font,fontSize=6,fillColor=TEXT,textAnchor="middle"))
         return d
 
     def before_after_chart(rows):

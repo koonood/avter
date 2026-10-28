@@ -645,6 +645,9 @@ input{
   line-height:1.6;
   max-width:760px
 }
+.site-legal-links{max-width:none;align-items:center;border-top:1px solid var(--line);padding:22px 8px;margin:38px auto 0}
+.site-legal-links a{display:inline-flex;align-items:center;min-height:36px;padding:7px 10px;border-radius:9px;color:var(--accent);font-weight:750;text-decoration:none}
+.site-legal-links a:hover{text-decoration:underline;background:var(--surface2)}
 
 @media(max-width:760px){
 
@@ -1513,6 +1516,7 @@ input{
   <a href="/legal?lang=en#terms" data-legal-link="terms">Terms and refunds</a>
   <a href="/legal?lang=en#privacy" data-legal-link="privacy">Privacy</a>
   <a href="/legal?lang=en#seller" data-legal-link="seller">Seller details</a>
+  <a href="/legal?lang=en#seller" data-legal-link="contact">Contact</a>
 </div>
 </section>
 
@@ -1724,7 +1728,7 @@ const translations = {
   ru: {
 
     navPrivacy:
-      'Приватность — в основе версия 1',
+      'Приватность — в основе',
 
     heroEyebrow:
       'Анализ отношений',
@@ -2574,14 +2578,14 @@ setLanguage(
 <script>
 (function(){
   const labels={
-    en:{service:'Service and prices',delivery:'Digital delivery',terms:'Terms and refunds',privacy:'Privacy',seller:'Seller details'},
-    ru:{service:'Услуга и цены',delivery:'Получение отчёта',terms:'Условия и возвраты',privacy:'Приватность',seller:'Данные продавца'},
-    es:{service:'Servicio y precios',delivery:'Entrega digital',terms:'Condiciones y reembolsos',privacy:'Privacidad',seller:'Datos del vendedor'},
-    it:{service:'Servizio e prezzi',delivery:'Consegna digitale',terms:'Condizioni e rimborsi',privacy:'Privacy',seller:'Dati del venditore'},
-    de:{service:'Leistung und Preise',delivery:'Digitale Bereitstellung',terms:'Bedingungen und Erstattung',privacy:'Datenschutz',seller:'Anbieterdaten'},
-    hi:{service:'सेवा और कीमतें',delivery:'डिजिटल डिलीवरी',terms:'शर्तें और रिफ़ंड',privacy:'गोपनीयता',seller:'विक्रेता विवरण'},
-    pt:{service:'Serviço e preços',delivery:'Entrega digital',terms:'Termos e reembolsos',privacy:'Privacidade',seller:'Dados do vendedor'},
-    fr:{service:'Service et tarifs',delivery:'Livraison numérique',terms:'Conditions et remboursements',privacy:'Confidentialité',seller:'Informations vendeur'}
+    en:{service:'Service and prices',delivery:'Digital delivery',terms:'Terms and refunds',privacy:'Privacy',seller:'Seller details',contact:'Contact'},
+    ru:{service:'Услуга и цены',delivery:'Получение отчёта',terms:'Условия и возвраты',privacy:'Приватность',seller:'Данные продавца',contact:'Контакты'},
+    es:{service:'Servicio y precios',delivery:'Entrega digital',terms:'Condiciones y reembolsos',privacy:'Privacidad',seller:'Datos del vendedor',contact:'Contacto'},
+    it:{service:'Servizio e prezzi',delivery:'Consegna digitale',terms:'Condizioni e rimborsi',privacy:'Privacy',seller:'Dati del venditore',contact:'Contatti'},
+    de:{service:'Leistung und Preise',delivery:'Digitale Bereitstellung',terms:'Bedingungen und Erstattung',privacy:'Datenschutz',seller:'Anbieterdaten',contact:'Kontakt'},
+    hi:{service:'सेवा और कीमतें',delivery:'डिजिटल डिलीवरी',terms:'शर्तें और रिफ़ंड',privacy:'गोपनीयता',seller:'विक्रेता विवरण',contact:'संपर्क'},
+    pt:{service:'Serviço e preços',delivery:'Entrega digital',terms:'Termos e reembolsos',privacy:'Privacidade',seller:'Dados do vendedor',contact:'Contato'},
+    fr:{service:'Service et tarifs',delivery:'Livraison numérique',terms:'Conditions et remboursements',privacy:'Confidentialité',seller:'Informations vendeur',contact:'Contact'}
   };
   function update(lang){const t=labels[lang]||labels.en;document.querySelectorAll('[data-legal-link]').forEach(a=>{const k=a.dataset.legalLink;a.textContent=t[k]||labels.en[k];a.href='/legal?lang='+encodeURIComponent(lang)+'#'+(k==='service'?'service':k==='delivery'?'delivery':k==='terms'?'terms':k==='privacy'?'privacy':'seller')})}
   const original=window.setLanguage;
@@ -2590,8 +2594,7 @@ setLanguage(
 })();
 </script>
 
-</body>
-</html>
+<script>
 (function(){
   const demo = {
     en:{
